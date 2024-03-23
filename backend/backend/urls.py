@@ -18,10 +18,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import TemplateView
+from game import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r"traders", views.TraderViewSet)
+router.register(r"orders", views.OrderViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("game.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="index.html"), name="index"),
+    path("api/", include(router.urls)),
 ]

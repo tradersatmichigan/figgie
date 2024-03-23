@@ -1,12 +1,15 @@
 import random
 
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import BaseUserCreationForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from rest_framework import permissions, viewsets
 
-from .models import Trader
+from .models import Order, Trader
+from .serializers import OrderSerializer, TraderSerializer
 
 
 class CustomBaseUserCreationForm(BaseUserCreationForm):
@@ -53,3 +56,23 @@ class SignUpView(CreateView):
     form_class = CustomBaseUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+
+class TraderViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows traders to be viewed or edited.
+    """
+
+    queryset = Trader.objects.all()
+    serializer_class = TraderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows orders to be viewed or edited.
+    """
+
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
