@@ -202,3 +202,32 @@ def fulfill_order(request: HttpRequest, order_id: int) -> JsonResponse:
             "price": order.price,
         }
     )
+
+class GetPortfolioForm(forms.Form):
+    trader_id = forms.IntegerField(min_value=1)
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_portfolio(request: HttpRequest) -> JsonResponse:
+
+    form = GetPortfolioForm(request.GET)
+
+    if not form.is_valid():
+        return JsonResponse({"error": "Invalid request"}, status=400)
+
+    trader_id = form.cleaned_data["trader_id"]
+
+    try:
+        trader: Trader = Trader.objects.get(id=trader_id)
+    except Trader.DoesNotExist:
+        return JsonResponse({"error": "Trader not found"}, status=404)
+
+    return JsonResponse(
+        {
+            "user": trader.user,
+            "apples": trader.apples,
+            "bananas": trader.bananas,
+            "cherries": trader.cherries,
+            "dragonfruit": trader.dragonfruit,
+        }
+    )
