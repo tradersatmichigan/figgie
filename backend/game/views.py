@@ -1,8 +1,10 @@
 import random
 
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import BaseUserCreationForm
 from django.contrib.auth.models import User
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
@@ -53,3 +55,11 @@ class SignUpView(CreateView):
     form_class = CustomBaseUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+
+@login_required
+def market(request, asset_name):
+    trader = Trader.objects.get(user=request.user.id)
+    return render(
+        request, "market.html", {"trader": trader, "asset_name": asset_name}
+    )
