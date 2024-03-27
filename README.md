@@ -18,7 +18,7 @@ The backend uses [Django](https://www.djangoproject.com/) on the backend with
 Install with:
 
 ```shell
-python -m pip install django redis "channels[daphne]"
+python -m pip install django "channels[daphne]" redis
 ```
 
 ### Run
