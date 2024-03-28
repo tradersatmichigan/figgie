@@ -18,8 +18,32 @@ const columns = [
   },
 ];
 
-function OrderBook({ asset, amountHeld, bids, asks }) {
+function OrderBook({ asset, amountHeld, orderBook }) {
+
+  let bids = [];
+  let asks = [];
+
+  let i = 0;
+
+  for (const order in orderBook) {
+    if (orderBook[order]["side"] == "B") {
+      bids.push({
+        id: i++,
+        price: orderBook[order]["price"],
+        quantity: orderBook[order]["quantity"]
+      })
+    } else if (orderBook[order]["side"] == "A") {
+      asks.push({
+        id: i++,
+        price: orderBook[order]["price"],
+        quantity: orderBook[order]["quantity"]
+      })
+    }
+  };
+
+
   return (
+    <Box>
       <Stack spacing={2}>
         <Box display="flex" alignItems="center">
           {asset} (× {amountHeld})
@@ -77,6 +101,7 @@ function OrderBook({ asset, amountHeld, bids, asks }) {
           </Box>
         </Stack>
       </Stack>
+      </Box>
   );
 }
 
