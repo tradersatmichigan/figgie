@@ -8,12 +8,12 @@
   You have {{ trader.cherries }} cherries.
   You have {{ trader.dragonfruit }} dragonfruit.
   You have ${{ trader.capital }} in capital.
-  <textarea id="order-log" cols="100" rows="20"></textarea>
+  <textarea id="order-log" cols="100" rows="15"></textarea>
   <br>
   <br>
   Place an order for {{ asset_name }}:
   <br>
-  Side:
+  Side (A/B):
   <input id="order-side-input" type="text" size="30">
   <br>
   Quantity:
@@ -35,10 +35,12 @@
     );
 
     assetSocket.onmessage = function(e) {
-      // console.log(e.data);
-        const data = JSON.parse(e.data);
-        document.querySelector('#order-log').value +=
-        (data.side + ', ' + data.quantity + ', $' + data.price + '\n');
+
+      // parse data:
+          // message_type: {no-match, partial-match, full-match, cancel}
+
+
+      document.querySelector('#order-log').value += (e.data + "\n");
     };
 
     assetSocket.onclose = function(e) {
@@ -54,12 +56,12 @@
 
     document.querySelector('#order-submit').onclick = function(e) {
         const sideInputDom = document.querySelector('#order-side-input');
-        const quantityInputDom = document.querySelector('#order-quantity-input');
         const priceInputDom = document.querySelector('#order-price-input');
+        const quantityInputDom = document.querySelector('#order-quantity-input');
 
         const side = sideInputDom.value;
-        const quantity = quantityInputDom.value;
         const price = priceInputDom.value;
+        const quantity = quantityInputDom.value;
 
         assetSocket.send(JSON.stringify({
             'side': side,

@@ -5,10 +5,17 @@ from django.db import models
 class Trader(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     capital = models.IntegerField()
-    apples = models.IntegerField()
-    bananas = models.IntegerField()
-    cherries = models.IntegerField()
-    dragonfruit = models.IntegerField()
+    buying_power = models.IntegerField()
+
+    apples = models.IntegerField(default=0)
+    bananas = models.IntegerField(default=0)
+    cherries = models.IntegerField(default=0)
+    dragonfruit = models.IntegerField(default=0)
+
+    apples_remaining = models.IntegerField(default=0)
+    bananas_remaining = models.IntegerField(default=0)
+    cherries_remaining = models.IntegerField(default=0)
+    dragonfruit_remaining = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.__str__()
@@ -26,7 +33,15 @@ class Order(models.Model):
         ("B", "Bid"),
     )
     trader = models.ForeignKey(Trader, on_delete=models.CASCADE)
-    asset = models.CharField(max_length=1, choices=ASSET_TYPES)
-    order_type = models.CharField(max_length=1, choices=ORDER_TYPES)
-    price = models.IntegerField()
+    asset = models.CharField(max_length=1, choices=ASSET_TYPES, db_index=True)
+    order_type = models.CharField(
+        max_length=1, choices=ORDER_TYPES, db_index=True
+    )
+    price = models.IntegerField(db_index=True)
     quantity = models.IntegerField()
+
+    def __str__(self):
+        return (
+            f"Order {self.id}: {self.order_type} for {self.quantity} of "
+            f"{self.asset} at {self.price}"
+        )

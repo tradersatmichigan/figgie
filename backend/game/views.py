@@ -40,13 +40,27 @@ class CustomBaseUserCreationForm(BaseUserCreationForm):
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()
+            starting_asset = random.randint(1, 4)
+            starting_amount = 2000 // starting_asset
+            starting_capital = 30_000 - (starting_amount * 10 * starting_asset)
             Trader.objects.create(
                 user=user,
-                capital=random.randint(1000, 10000),
-                apples=random.randint(0, 100),
-                bananas=random.randint(0, 100),
-                cherries=random.randint(0, 100),
-                dragonfruit=random.randint(0, 100),
+                capital=starting_capital,
+                buying_power=starting_capital,
+                apples=starting_amount if starting_asset == 1 else 0,
+                bananas=starting_amount if starting_asset == 2 else 0,
+                cherries=starting_amount if starting_asset == 3 else 0,
+                dragonfruit=starting_amount if starting_asset == 4 else 0,
+                apples_remaining=starting_amount if starting_asset == 1 else 0,
+                bananas_remaining=(
+                    starting_amount if starting_asset == 2 else 0
+                ),
+                cherries_remaining=(
+                    starting_amount if starting_asset == 3 else 0
+                ),
+                dragonfruit_remaining=(
+                    starting_amount if starting_asset == 4 else 0
+                ),
             )
         return user
 

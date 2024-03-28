@@ -3,6 +3,13 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
+from .models import Trader
+from .utils import (InsufficientAssetsException, InsufficientCapitalException,
+                    InvalidOrderException, match_order, settle_trades,
+                    validate_order)
+
+update_count = 0
+
 
 class AssetConsumer(WebsocketConsumer):
     def connect(self):
@@ -22,31 +29,54 @@ class AssetConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         order = json.loads(text_data)
-        side = order["side"]
-        quantity = order["quantity"]
-        price = order["price"]
+        try:
+            user = self.scope["user"]
+            side = order["side"]
+            price = int(order["price"])
+            quantity = int(order["quantity"])
+            trader: Trader = Trader.objects.get(user=user.id)
+            validate_order(
+                trader=trader,
+                asset=self.asset_name[0].upper(),
+                order_type=side,
+                price=price,
+                quantity=quantity,
+            )
+        except (
+            KeyError,
+            Trader.DoesNotExist,
+            InvalidOrderException,
+            InsufficientCapitalException,
+            InsufficientAssetsException,
+        ) as err:
+            self.send(text_data=json.dumps({"error": str(err)}))
+            return
 
+        trades, order = match_order(
+            trader=trader,
+            asset=self.asset_name[0].upper(),  # TODO: make this cleaner
+            order_type=side,
+            price=price,
+            quantity=quantity,
+        )
+        settle_trades(trades)
+
+        global update_count
         async_to_sync(self.channel_layer.group_send)(
             self.asset_group_name,
             {
                 "type": "order.message",
-                "side": side,
-                "quantity": quantity,
-                "price": price,
+                "update_id": update_count,
+                "trades": trades,
+                "order": order,
             },
         )
+        update_count += 1
 
     def order_message(self, event):
-        side = event["side"]
-        quantity = event["quantity"]
-        price = event["price"]
-
-        self.send(
-            text_data=json.dumps(
-                {
-                    "side": side,
-                    "quantity": quantity,
-                    "price": price,
-                }
-            )
-        )
+        data = {
+            "update_id": event["update_id"],
+            "trades": event["trades"],
+            "order": event["order"],
+        }
+        self.send(text_data=json.dumps(data))
