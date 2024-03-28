@@ -9,7 +9,7 @@ function DashBoard() {
 
     return (
         <div>
-            <ApplePortal asset={"Apples"} amountHeld={apples} setApples={setApples} setCash={setCash}/>
+            <ApplePortal asset={"Apples"} amountHeld={apples} setApples={setApples} cash={cash} setCash={setCash}/>
             <Portfolio cash={cash} apples={apples}/>
         </div>
     );

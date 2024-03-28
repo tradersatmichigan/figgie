@@ -20,7 +20,6 @@ function OrderForm({ ws }) {
     const [side, setSide] = useState("B");
 
     const handleSubmit = (e) => { // Will be subbed for the ws.sendMessage()
-        e.preventDefault()
         console.log(price, quantity, side[0])
     }
 
