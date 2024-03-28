@@ -28,20 +28,18 @@ class Order(models.Model):
         ("C", "Cherries"),
         ("D", "Dragonfruit"),
     )
-    ORDER_TYPES = (
+    SIDES = (
         ("A", "Ask"),
         ("B", "Bid"),
     )
     trader = models.ForeignKey(Trader, on_delete=models.CASCADE)
     asset = models.CharField(max_length=1, choices=ASSET_TYPES, db_index=True)
-    order_type = models.CharField(
-        max_length=1, choices=ORDER_TYPES, db_index=True
-    )
+    side = models.CharField(max_length=1, choices=SIDES, db_index=True)
     price = models.IntegerField(db_index=True)
     quantity = models.IntegerField()
 
     def __str__(self):
         return (
-            f"Order {self.id}: {self.order_type} for {self.quantity} of "
+            f"Order {self.id}: {self.side} for {self.quantity} of "
             f"{self.asset} at {self.price}"
         )

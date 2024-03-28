@@ -6,7 +6,7 @@ from .models import Order, Trader
 
 class OrderValidationForm(forms.Form):
     asset = forms.ChoiceField(choices=Order.ASSET_TYPES)
-    order_type = forms.ChoiceField(choices=Order.ORDER_TYPES)
+    side = forms.ChoiceField(choices=Order.SIDES)
     price = forms.IntegerField(validators=[MinValueValidator(1)])
     quantity = forms.IntegerField(validators=[MinValueValidator(1)])
 
@@ -30,12 +30,12 @@ class InsufficientAssetsException(Exception):
 
 
 def validate_order(
-    trader: Trader, asset: str, order_type: str, price: int, quantity: int
+    trader: Trader, asset: str, side: str, price: int, quantity: int
 ) -> None:
     form = OrderValidationForm(
         {
             "asset": asset,
-            "order_type": order_type,
+            "side": side,
             "price": price,
             "quantity": quantity,
         }
@@ -43,9 +43,9 @@ def validate_order(
     if not form.is_valid():
         raise InvalidOrderException(form.errors)
 
-    if order_type == "B" and price * quantity > trader.buying_power:
+    if side == "B" and price * quantity > trader.buying_power:
         raise InsufficientCapitalException
-    if order_type == "A":
+    if side == "A":
         if asset == "A" and quantity > trader.apples_remaining:
             raise InsufficientAssetsException(asset=asset)
         elif asset == "B" and quantity > trader.bananas_remaining:
@@ -57,35 +57,33 @@ def validate_order(
 
 
 def match_order(
-    trader: Trader, asset: str, order_type: str, price: int, quantity: int
+    trader: Trader, asset: str, side: str, price: int, quantity: int
 ) -> tuple[list[dict], dict]:
     """Matches order and places a new order, if needed."""
-    if order_type == "A":
+    if side == "A":
         matches: list[Order] = Order.objects.filter(
-            asset=asset, order_type="B", price__gte=price
+            asset=asset, side="B", price__gte=price
         ).order_by("-price", "id")
     else:
         matches: list[Order] = Order.objects.filter(
-            asset=asset, order_type="A", price__lte=price
+            asset=asset, side="A", price__lte=price
         ).order_by("price", "id")
 
     trade_list = []
     for order in matches:
         q_matched = min(quantity, order.quantity)
         p_matched = (
-            min(price, order.price)
-            if order_type == "B"
-            else max(price, order.price)
+            min(price, order.price) if side == "B" else max(price, order.price)
         )
         trade_list.append(
             {
                 "order_id": order.id,
                 "asset": asset,
                 "buyer_id": (
-                    order.trader.id if order.order_type == "B" else trader.id
+                    order.trader.id if order.side == "B" else trader.id
                 ),
                 "seller_id": (
-                    order.trader.id if order.order_type == "A" else trader.id
+                    order.trader.id if order.side == "A" else trader.id
                 ),
                 "price": p_matched,
                 "quantity": q_matched,
@@ -105,14 +103,14 @@ def match_order(
         order: Order = Order.objects.create(
             trader=trader,
             asset=asset,
-            order_type=order_type,
+            side=side,
             price=price,
             quantity=quantity,
         )
         order.save()
-        if order_type == "B":
+        if side == "B":
             trader.buying_power -= price * quantity
-        if order_type == "A":
+        if side == "A":
             match asset:
                 case "A":
                     trader.apples_remaining -= quantity
@@ -126,7 +124,7 @@ def match_order(
         order_dict = {
             "order_id": order.id,
             "trader_id": order.trader.id,
-            "order_type": order.order_type,
+            "side": order.side,
             "price": order.price,
             "quantity": order.quantity,
         }
@@ -157,14 +155,14 @@ def settle_trades(trades: list[dict]) -> None:
 
 
 # def place_order(
-#     user_id: int, asset: str, order_type: str, price: int, quantity: int
+#     user_id: int, asset: str, side: str, price: int, quantity: int
 # ) -> dict:
 #
 #     form = OrderValidationForm(
 #         {
 #             "user_id": user_id,
 #             "asset": asset,
-#             "order_type": order_type,
+#             "side": side,
 #             "price": price,
 #             "quantity": quantity,
 #         }
@@ -173,7 +171,7 @@ def settle_trades(trades: list[dict]) -> None:
 #         return {"error": form.errors}
 #
 #     user_id = form.cleaned_data["user_id"]
-#     order_type = form.cleaned_data["order_type"]
+#     side = form.cleaned_data["side"]
 #     asset = form.cleaned_data["asset"]
 #     price = form.cleaned_data["price"]
 #     quantity = form.cleaned_data["quantity"]
@@ -186,7 +184,7 @@ def settle_trades(trades: list[dict]) -> None:
 #     order = Order.objects.create(
 #         trader=trader,
 #         asset=asset,
-#         order_type=order_type,
+#         side=side,
 #         price=price,
 #         quantity=quantity,
 #     )

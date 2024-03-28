@@ -38,7 +38,7 @@ class AssetConsumer(WebsocketConsumer):
             validate_order(
                 trader=trader,
                 asset=self.asset_name[0].upper(),
-                order_type=side,
+                side=side,
                 price=price,
                 quantity=quantity,
             )
@@ -55,7 +55,7 @@ class AssetConsumer(WebsocketConsumer):
         trades, order = match_order(
             trader=trader,
             asset=self.asset_name[0].upper(),  # TODO: make this cleaner
-            order_type=side,
+            side=side,
             price=price,
             quantity=quantity,
         )

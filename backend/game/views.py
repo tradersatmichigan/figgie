@@ -1,6 +1,7 @@
 import random
 
 from django import forms
+from django.contrib.admin.views.autocomplete import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import BaseUserCreationForm
 from django.contrib.auth.models import User
@@ -8,7 +9,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from .models import Trader
+from .models import Order, Trader
 
 
 class CustomBaseUserCreationForm(BaseUserCreationForm):
@@ -77,3 +78,38 @@ def market(request, asset_name):
     return render(
         request, "market.html", {"trader": trader, "asset_name": asset_name}
     )
+
+
+@login_required
+def cancel_order(request, order_id) -> JsonResponse:
+    """This won't actually be used. This logic should instead be
+    handled by a websocket I think."""
+    try:
+        order: Order = Order.objects.get(id=order_id)
+        trader: Trader = Trader.objects.get(user=request.user.id)
+    except Order.DoesNotExist:
+        return JsonResponse(
+            {"error": f"Order with order_id={order_id} not found"}, status=404
+        )
+    except Trader.DoesNotExist:
+        return JsonResponse(
+            {"error": f"Something went wrong, trader not found"}, status=500
+        )
+    if order.user.id != request.user.id:
+        return JsonResponse(
+            {"error": f"Cannot cancel another user's order"}, status=403
+        )
+    if order.side == "B":
+        trader.buying_power += order.price * order.quantity
+    elif order.side == "A":
+        match order.asset:
+            case "A":
+                trader.apples_remaining += order.quantity
+            case "B":
+                trader.bananas_remaining += order.quantity
+            case "C":
+                trader.cherries_remaining += order.quantity
+            case "D":
+                trader.dragonfruit_remaining += order.quantity
+    trader.save()
+    order.delete()
