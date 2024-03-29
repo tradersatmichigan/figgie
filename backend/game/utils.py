@@ -153,40 +153,26 @@ def settle_trades(trades: list[dict]) -> None:
         seller.save()
 
 
-# def place_order(
-#     user_id: int, asset: str, side: str, price: int, quantity: int
-# ) -> dict:
-#
-#     form = OrderValidationForm(
-#         {
-#             "user_id": user_id,
-#             "asset": asset,
-#             "side": side,
-#             "price": price,
-#             "quantity": quantity,
-#         }
-#     )
-#     if not form.is_valid():
-#         return {"error": form.errors}
-#
-#     user_id = form.cleaned_data["user_id"]
-#     side = form.cleaned_data["side"]
-#     asset = form.cleaned_data["asset"]
-#     price = form.cleaned_data["price"]
-#     quantity = form.cleaned_data["quantity"]
-#
-#     try:
-#         trader: Trader = Trader.objects.get(user=user_id)
-#     except Trader.DoesNotExist:
-#         return {"error": f"No trader object found with user_id={user_id}"}
-#
-#     order = Order.objects.create(
-#         trader=trader,
-#         asset=asset,
-#         side=side,
-#         price=price,
-#         quantity=quantity,
-#     )
-#     order.save()
-#
-#     return order.id
+def cancel_order(order_id: int, user_id: int) -> None:
+    try:
+        order: Order = Order.objects.get(id=order_id)
+        trader: Trader = Trader.objects.get(id=order.trader)
+    except (Order.DoesNotExist, Trader.DoesNotExist):
+        return
+    if trader.user.id != user_id:
+        return
+
+    if order.side == "B":
+        trader.buying_power += order.price * order.quantity
+    else:
+        match order.asset:
+            case "A":
+                trader.apples_remaining += order.quantity
+            case "B":
+                trader.bananas_remaining += order.quantity
+            case "C":
+                trader.cherries_remaining += order.quantity
+            case "D":
+                trader.dragonfruit_remaining += order.quantity
+    trader.save()
+    order.delete()
