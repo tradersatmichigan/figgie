@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Market{% endblock %}
+{% block content %}
+  Hi {{ user.username }}!
+  This is the market page.
+  You have {{ trader.apples }} apples.
+  You have {{ trader.bananas }} bananas.
+  You have {{ trader.cherries }} cherries.
+  You have {{ trader.dragonfruit }} dragonfruit.
+  You have ${{ trader.capital }} in capital.
+  <textarea id="order-log" cols="100" rows="15"></textarea>
+  <br>
+  <br>
+  Place an order for {{ asset_name }}:
+  <br>
+  Side (A/B):
+  <input id="order-side-input" type="text" size="30">
+  <br>
+  Quantity:
+  <input id="order-quantity-input" type="number" size="30">
+  <br>
+  Price:
+  <input id="order-price-input" type="number" size="30">
+  <br>
+  <input id="order-submit" type="button" value="Send">
+  <script>
+    const asset = '{{ asset_name }}'
+
+    const assetSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/market/'
+        + asset
+        + '/'
+    );
+
+    assetSocket.onmessage = function(e) {
+
+      // parse data:
+          // message_type: {no-match, partial-match, full-match, cancel}
+
+
+      document.querySelector('#order-log').value += (e.data + "\n");
+    };
+
+    assetSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    // document.querySelector('#chat-message-input').focus();
+    // document.querySelector('#chat-message-input').onkeyup = function(e) {
+    //     if (e.key === 'Enter') {  // enter, return
+    //         document.querySelector('#chat-message-submit').click();
+    //     }
+    // };
+
+    document.querySelector('#order-submit').onclick = function(e) {
+        const sideInputDom = document.querySelector('#order-side-input');
+        const priceInputDom = document.querySelector('#order-price-input');
+        const quantityInputDom = document.querySelector('#order-quantity-input');
+
+        const side = sideInputDom.value;
+        const price = priceInputDom.value;
+        const quantity = quantityInputDom.value;
+
+        assetSocket.send(JSON.stringify({
+            'side': side,
+            'quantity': quantity,
+            'price': price,
+        }));
+    };
+  </script>
+{% endblock %}
