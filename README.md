@@ -13,7 +13,8 @@ python -m venv .env
 source .env/bin/activate
 ```
 
-The backend uses [Django](https://www.djangoproject.com/) on the backend with 
+
+The backend uses [Django](https://www.djangoproject.com/) with 
 [Channels](https://channels.readthedocs.io/en/latest/index.html) and redis.
 Install with:
 
