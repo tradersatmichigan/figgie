@@ -71,10 +71,9 @@ def match_order(
 
     trade_list = []
     for order in matches:
+        if order.trader == trader:
+            continue
         q_matched = min(quantity, order.quantity)
-        p_matched = (
-            min(price, order.price) if side == "B" else max(price, order.price)
-        )
         trade_list.append(
             {
                 "order_id": order.id,
@@ -85,7 +84,7 @@ def match_order(
                 "seller_id": (
                     order.trader.id if order.side == "A" else trader.id
                 ),
-                "price": p_matched,
+                "price": order.price,
                 "quantity": q_matched,
             }
         )
