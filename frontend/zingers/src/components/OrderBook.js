@@ -27,29 +27,18 @@ function OrderBook({ asset, amountHeld, orderBook }) {
   let added = false;
 
   for (const order in orderBook) {
-    for (const j in orderBook)
-    {
-      if (orderBook[order]["price"] == orderBook[j]["price"])
-      {
-        orderBook[j]["quanity"] += orderBook[order]["quantity"];
-        added = true;
-      }
-    }
-    if (!added)
-    {
-      if (orderBook[order]["side"] == "B") {
-        bids.push({
-          id: i++,
-          price: orderBook[order]["price"],
-          quantity: orderBook[order]["quantity"]
-        })
-      } else if (orderBook[order]["side"] == "A") {
-        asks.push({
-          id: i++,
-          price: orderBook[order]["price"],
-          quantity: orderBook[order]["quantity"]
-        })
-      }
+    if (orderBook[order]["side"] == "B") {
+      bids.push({
+        id: i++,
+        price: orderBook[order]["price"],
+        quantity: orderBook[order]["quantity"]
+      })
+    } else if (orderBook[order]["side"] == "A") {
+      asks.push({
+        id: i++,
+        price: orderBook[order]["price"],
+        quantity: orderBook[order]["quantity"]
+      })
     }
   };
 
