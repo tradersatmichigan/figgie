@@ -54,6 +54,36 @@ function ApplePortal({ asset, amountHeld, setApples, cash, setCash }) {
       quantity : 8,
       price : 6
     },
+    4 : {
+      side : "A", //"B" = bid, "A" = ask
+      trader : 3,
+      quantity : 8,
+      price : 6
+    },
+    5 : {
+      side : "A", //"B" = bid, "A" = ask
+      trader : 3,
+      quantity : 8,
+      price : 6
+    },
+    6 : {
+      side : "A", //"B" = bid, "A" = ask
+      trader : 3,
+      quantity : 8,
+      price : 6
+    },
+    7 : {
+      side : "A", //"B" = bid, "A" = ask
+      trader : 3,
+      quantity : 8,
+      price : 6
+    },
+    8 : {
+      side : "A", //"B" = bid, "A" = ask
+      trader : 3,
+      quantity : 8,
+      price : 6
+    },
   });
 
   function fetchInitialState() {

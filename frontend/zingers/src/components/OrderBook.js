@@ -22,24 +22,41 @@ function OrderBook({ asset, amountHeld, orderBook }) {
 
   let bids = [];
   let asks = [];
-
+  const bidgrouping  = {};
+  const askgrouping  = {};
   let i = 0;
-  let added = false;
 
   for (const order in orderBook) {
     if (orderBook[order]["side"] == "B") {
-      bids.push({
-        id: i++,
-        price: orderBook[order]["price"],
-        quantity: orderBook[order]["quantity"]
-      })
+      if(bidgrouping.hasOwnProperty(orderBook[order]["price"])) {
+        bidgrouping[orderBook[order]["price"]] += orderBook[order]["quantity"]
+      }
+      else{
+        bidgrouping[orderBook[order]["price"]] = orderBook[order]["quantity"]
+      }
     } else if (orderBook[order]["side"] == "A") {
-      asks.push({
-        id: i++,
-        price: orderBook[order]["price"],
-        quantity: orderBook[order]["quantity"]
-      })
+      if(askgrouping.hasOwnProperty(orderBook[order]["price"])) {
+        askgrouping[orderBook[order]["price"]] += orderBook[order]["quantity"]
+      }
+      else{
+        askgrouping[orderBook[order]["price"]] = orderBook[order]["quantity"]
+      }
     }
+  };
+
+  for (let price in bidgrouping){
+    bids.push({
+      id: i++,
+      price: price,
+      quantity: bidgrouping[price]
+    })
+  };
+  for (let price in askgrouping){
+    asks.push({
+      id: i++,
+      price: price,
+      quantity: askgrouping[price]
+    })
   };
 
 
