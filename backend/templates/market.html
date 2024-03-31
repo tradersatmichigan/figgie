@@ -3,15 +3,15 @@
 {% block content %}
   Hi {{ user.username }}!
   This is the market page.
-  You have {{ trader.apples }} apples.
-  You have {{ trader.bananas }} bananas.
-  You have {{ trader.cherries }} cherries.
-  You have {{ trader.dragonfruit }} dragonfruit.
+  You have {{ trader.asset_0 }} asset_0.
+  You have {{ trader.asset_1 }} asset_1.
+  You have {{ trader.asset_2 }} asset_2.
+  You have {{ trader.asset_3 }} asset_3.
   You have ${{ trader.capital }} in capital.
+  <br>
   <textarea id="order-log" cols="100" rows="15"></textarea>
   <br>
-  <br>
-  Place an order for {{ asset_name }}:
+  Place an order for {{ asset_num }}:
   <br>
   Side (A/B):
   <input id="order-side-input" type="text" size="30">
@@ -24,7 +24,7 @@
   <br>
   <input id="order-submit" type="button" value="Send">
   <script>
-    const asset = '{{ asset_name }}'
+    const asset = '{{ asset_num }}'
 
     const assetSocket = new WebSocket(
         'ws://'

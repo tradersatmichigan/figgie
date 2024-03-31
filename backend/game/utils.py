@@ -1,11 +1,11 @@
 from django import forms
 from django.core.validators import MinValueValidator
 
-from .models import Order, Trader
+from .models import Asset, Order, Trader
 
 
 class OrderValidationForm(forms.Form):
-    asset = forms.ChoiceField(choices=Order.ASSET_TYPES)
+    asset = forms.ChoiceField(choices=Asset)
     side = forms.ChoiceField(choices=Order.SIDES)
     price = forms.IntegerField(validators=[MinValueValidator(1)])
     quantity = forms.IntegerField(validators=[MinValueValidator(1)])
@@ -21,7 +21,7 @@ class InsufficientCapitalException(Exception):
 
 
 class InsufficientAssetsException(Exception):
-    def __init__(self, asset: str) -> None:
+    def __init__(self, asset: int) -> None:
         super().__init__()
         self.asset = asset
 
@@ -30,7 +30,7 @@ class InsufficientAssetsException(Exception):
 
 
 def validate_order(
-    trader: Trader, asset: str, side: str, price: int, quantity: int
+    trader: Trader, asset: int, side: str, price: int, quantity: int
 ) -> None:
     form = OrderValidationForm(
         {
@@ -45,27 +45,32 @@ def validate_order(
 
     if side == "B" and price * quantity > trader.buying_power:
         raise InsufficientCapitalException
-    if side == "A":
-        if asset == "A" and quantity > trader.apples_remaining:
-            raise InsufficientAssetsException(asset=asset)
-        elif asset == "B" and quantity > trader.bananas_remaining:
-            raise InsufficientAssetsException(asset=asset)
-        elif asset == "C" and quantity > trader.cherries_remaining:
-            raise InsufficientAssetsException(asset=asset)
-        elif asset == "D" and quantity > trader.dragonfruit_remaining:
-            raise InsufficientAssetsException(asset=asset)
+    if side == "A" and quantity > trader.assets_remaining(asset):
+        raise InsufficientAssetsException(asset=asset)
+
+
+def get_all_orders(asset: int) -> list[dict]:
+    return [
+        {
+            "trader_id": order.trader.id,
+            "side": order.side,
+            "price": order.price,
+            "quantaty": order.quantity,
+        }
+        for order in Order.objects.filter(asset=asset)
+    ]
 
 
 def match_order(
-    trader: Trader, asset: str, side: str, price: int, quantity: int
+    trader: Trader, asset: int, side: str, price: int, quantity: int
 ) -> tuple[list[dict], dict]:
     """Matches order and places a new order, if needed."""
     if side == "A":
-        matches: list[Order] = Order.objects.filter(
+        matches = Order.objects.filter(
             asset=asset, side="B", price__gte=price
         ).order_by("-price", "id")
     else:
-        matches: list[Order] = Order.objects.filter(
+        matches = Order.objects.filter(
             asset=asset, side="A", price__lte=price
         ).order_by("price", "id")
 
@@ -99,27 +104,7 @@ def match_order(
 
     order_dict = {}
     if quantity > 0:
-        order: Order = Order.objects.create(
-            trader=trader,
-            asset=asset,
-            side=side,
-            price=price,
-            quantity=quantity,
-        )
-        order.save()
-        if side == "B":
-            trader.buying_power -= price * quantity
-        if side == "A":
-            match asset:
-                case "A":
-                    trader.apples_remaining -= quantity
-                case "B":
-                    trader.bananas_remaining -= quantity
-                case "C":
-                    trader.cherries_remaining -= quantity
-                case "D":
-                    trader.dragonfruit_remaining -= quantity
-        trader.save()
+        order = trader.place_order(asset, side, price, quantity)
         order_dict = {
             "order_id": order.id,
             "trader_id": order.trader.id,
@@ -134,23 +119,8 @@ def settle_trades(trades: list[dict]) -> None:
     for trade in trades:
         buyer: Trader = Trader.objects.get(id=trade["buyer_id"])
         seller: Trader = Trader.objects.get(id=trade["seller_id"])
-        match trade["asset"]:
-            case "A":
-                buyer.apples += trade["quantity"]
-                seller.apples -= trade["quantity"]
-            case "B":
-                buyer.bananas += trade["quantity"]
-                seller.bananas -= trade["quantity"]
-            case "C":
-                buyer.cherries += trade["quantity"]
-                seller.cherries -= trade["quantity"]
-            case "D":
-                buyer.dragonfruit += trade["quantity"]
-                seller.dragonfruit -= trade["quantity"]
-        buyer.capital -= trade["price"] * trade["quantity"]
-        seller.capital += trade["price"] * trade["quantity"]
-        buyer.save()
-        seller.save()
+        buyer.buy(trade["asset"], trade["price"], trade["quantity"])
+        seller.sell(trade["asset"], trade["price"], trade["quantity"])
 
 
 def cancel_order(order_id: int, user_id: int) -> None:
@@ -164,15 +134,17 @@ def cancel_order(order_id: int, user_id: int) -> None:
 
     if order.side == "B":
         trader.buying_power += order.price * order.quantity
-    else:
+    if order.side == "A":
         match order.asset:
-            case "A":
-                trader.apples_remaining += order.quantity
-            case "B":
-                trader.bananas_remaining += order.quantity
-            case "C":
-                trader.cherries_remaining += order.quantity
-            case "D":
-                trader.dragonfruit_remaining += order.quantity
+            case 0:
+                trader.asset_0_remaining += order.quantity
+            case 1:
+                trader.asset_1_remaining += order.quantity
+            case 2:
+                trader.asset_2_remaining += order.quantity
+            case 3:
+                trader.asset_3_remaining += order.quantity
+            case _:
+                raise KeyError
     trader.save()
     order.delete()

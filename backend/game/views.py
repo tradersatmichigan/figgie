@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
 from .models import Order, Trader
+from .utils import get_all_orders
 
 
 class CustomBaseUserCreationForm(BaseUserCreationForm):
@@ -41,26 +42,30 @@ class CustomBaseUserCreationForm(BaseUserCreationForm):
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()
-            starting_asset = random.randint(1, 4)
-            starting_amount = 2000 // starting_asset
-            starting_capital = 30_000 - (starting_amount * 10 * starting_asset)
+            starting_asset = random.randint(0, 3)
+            starting_amount = 2000 // (starting_asset + 1)
+            starting_capital = 30_000 - (
+                starting_amount * 10 * (starting_asset + 1)
+            )
             Trader.objects.create(
                 user=user,
                 capital=starting_capital,
                 buying_power=starting_capital,
-                apples=starting_amount if starting_asset == 1 else 0,
-                bananas=starting_amount if starting_asset == 2 else 0,
-                cherries=starting_amount if starting_asset == 3 else 0,
-                dragonfruit=starting_amount if starting_asset == 4 else 0,
-                apples_remaining=starting_amount if starting_asset == 1 else 0,
-                bananas_remaining=(
+                asset_0=starting_amount if starting_asset == 0 else 0,
+                asset_1=starting_amount if starting_asset == 1 else 0,
+                asset_2=starting_amount if starting_asset == 2 else 0,
+                asset_3=starting_amount if starting_asset == 3 else 0,
+                asset_0_remaining=(
+                    starting_amount if starting_asset == 0 else 0
+                ),
+                asset_1_remaining=(
+                    starting_amount if starting_asset == 1 else 0
+                ),
+                asset_2_remaining=(
                     starting_amount if starting_asset == 2 else 0
                 ),
-                cherries_remaining=(
+                asset_3_remaining=(
                     starting_amount if starting_asset == 3 else 0
-                ),
-                dragonfruit_remaining=(
-                    starting_amount if starting_asset == 4 else 0
                 ),
             )
         return user
@@ -73,43 +78,50 @@ class SignUpView(CreateView):
 
 
 @login_required
-def market(request, asset_name):
+def market(request, asset_num: int):
     trader = Trader.objects.get(user=request.user.id)
     return render(
-        request, "market.html", {"trader": trader, "asset_name": asset_name}
+        request, "market.html", {"trader": trader, "asset_num": asset_num}
     )
 
 
 @login_required
-def cancel_order(request, order_id) -> JsonResponse:
-    """This won't actually be used. This logic should instead be
-    handled by a websocket I think."""
+def get_game_state(request):
     try:
-        order: Order = Order.objects.get(id=order_id)
         trader: Trader = Trader.objects.get(user=request.user.id)
-    except Order.DoesNotExist:
-        return JsonResponse(
-            {"error": f"Order with order_id={order_id} not found"}, status=404
-        )
     except Trader.DoesNotExist:
-        return JsonResponse(
-            {"error": f"Something went wrong, trader not found"}, status=500
-        )
-    if order.user.id != request.user.id:
-        return JsonResponse(
-            {"error": f"Cannot cancel another user's order"}, status=403
-        )
-    if order.side == "B":
-        trader.buying_power += order.price * order.quantity
-    elif order.side == "A":
-        match order.asset:
-            case "A":
-                trader.apples_remaining += order.quantity
-            case "B":
-                trader.bananas_remaining += order.quantity
-            case "C":
-                trader.cherries_remaining += order.quantity
-            case "D":
-                trader.dragonfruit_remaining += order.quantity
-    trader.save()
-    order.delete()
+        return JsonResponse({"error": "No trader account."}, status=403)
+    return JsonResponse(
+        {
+            "portfolio": {
+                "capital": trader.capital,
+                "buying_power": trader.buying_power,
+                "assets": [
+                    trader.asset_0,
+                    trader.asset_1,
+                    trader.asset_2,
+                    trader.asset_3,
+                ],
+                "assets_remaining": [
+                    trader.asset_0_remaining,
+                    trader.asset_1_remaining,
+                    trader.asset_2_remaining,
+                    trader.asset_3_remaining,
+                ],
+            },
+            "orders": [get_all_orders(asset) for asset in range(4)],
+        },
+        status=200,
+    )
+
+
+@login_required
+def get_leaderboard(request):
+    traders = Trader.objects.all()
+    pairs = [
+        (trader.user.username, trader.get_portfolio_value())
+        for trader in traders
+    ]
+    return JsonResponse(
+        sorted(pairs, key=lambda x: x[1], reverse=True), safe=False, status=200
+    )

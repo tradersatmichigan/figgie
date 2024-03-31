@@ -13,8 +13,13 @@ update_count = 0
 
 class AssetConsumer(WebsocketConsumer):
     def connect(self):
-        self.asset_name = self.scope["url_route"]["kwargs"]["asset_name"]
-        self.asset_group_name = f"market_{self.asset_name}"
+        try:
+            self.asset_num = int(
+                self.scope["url_route"]["kwargs"]["asset_num"]
+            )
+        except (ValueError, KeyError):
+            return
+        self.asset_group_name = f"market_{self.asset_num}"
 
         async_to_sync(self.channel_layer.group_add)(
             self.asset_group_name, self.channel_name
@@ -36,13 +41,14 @@ class AssetConsumer(WebsocketConsumer):
             async_to_sync(self.channel_layer.group_send)(
                 self.asset_group_name,
                 {
-                    "type": "order.message",
+                    "type": "cancel.message",
                     "update_id": update_count,
                     "cancel": True,
                     "order_id": data["order_id"],
                 },
             )
             update_count += 1
+            return
         try:
             user = self.scope["user"]
             side = data["side"]
@@ -51,7 +57,7 @@ class AssetConsumer(WebsocketConsumer):
             trader: Trader = Trader.objects.get(user=user.id)
             validate_order(
                 trader=trader,
-                asset=self.asset_name[0].upper(),
+                asset=self.asset_num,
                 side=side,
                 price=price,
                 quantity=quantity,
@@ -68,7 +74,7 @@ class AssetConsumer(WebsocketConsumer):
 
         trades, data = match_order(
             trader=trader,
-            asset=self.asset_name[0].upper(),  # TODO: make this cleaner
+            asset=self.asset_num,
             side=side,
             price=price,
             quantity=quantity,
