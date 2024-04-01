@@ -1,14 +1,19 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import OrderBook from "./OrderBook";
 
-export default function AssetInterface({ asset }) {
+export default function AssetInterface({
+  asset,
+  orders,
+  setOrders,
+  bids,
+  setBids,
+  asks,
+  setAsks,
+}) {
   const socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const [lastUpdateId, setLastUpdateId] = useState(null);
-  const [orders, setOrders] = useState({});
-  const [bids, setBids] = useState({});
-  const [asks, setAsks] = useState({});
 
   function updateBids(order, trade) {
     if (bids[order.price] === trade.quantity) {
