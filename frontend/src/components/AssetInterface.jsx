@@ -1,3 +1,4 @@
+import { Box } from "@mui/system";
 import React, { useState, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import OrderBook from "./OrderBook";
@@ -116,23 +117,5 @@ export default function AssetInterface({
     }
   }, [lastMessage]);
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
-
-  return (
-    <div>
-      <p>
-        The WebSocket for asset {asset} is currently: {connectionStatus}.
-      </p>
-      <OrderBook bids={bids} asks={asks} />
-      <p>Bids: {JSON.stringify(bids)}</p>
-      <p>Asks: {JSON.stringify(asks)}</p>
-      <p>Orders: {JSON.stringify(orders)}</p>
-    </div>
-  );
+  return <OrderBook bids={bids} asks={asks} />;
 }
