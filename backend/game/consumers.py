@@ -34,9 +34,9 @@ class AssetConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         global update_count
-        data = json.loads(text_data)
-        if "cancel" in data and data["cancel"]:
-            cancel_order(data["order_id"], self.scope["user"])
+        order = json.loads(text_data)
+        if "cancel" in order and order["cancel"]:
+            cancel_order(order["order_id"], self.scope["user"])
 
             async_to_sync(self.channel_layer.group_send)(
                 self.asset_group_name,
@@ -44,16 +44,16 @@ class AssetConsumer(WebsocketConsumer):
                     "type": "cancel.message",
                     "update_id": update_count,
                     "cancel": True,
-                    "order_id": data["order_id"],
+                    "order_id": order["order_id"],
                 },
             )
             update_count += 1
             return
         try:
             user = self.scope["user"]
-            side = data["side"]
-            price = int(data["price"])
-            quantity = int(data["quantity"])
+            side = order["side"]
+            price = int(order["price"])
+            quantity = int(order["quantity"])
             trader: Trader = Trader.objects.get(user=user.id)
             validate_order(
                 trader=trader,
@@ -72,7 +72,7 @@ class AssetConsumer(WebsocketConsumer):
             self.send(text_data=json.dumps({"error": str(err)}))
             return
 
-        trades, data = match_order(
+        trades, order = match_order(
             trader=trader,
             asset=self.asset_num,
             side=side,
@@ -86,8 +86,8 @@ class AssetConsumer(WebsocketConsumer):
             {
                 "type": "order.message",
                 "update_id": update_count,
-                "trades": trades,
-                "order": data,
+                "trades": trades or None,
+                "order": order,
             },
         )
         update_count += 1

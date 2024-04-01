@@ -63,7 +63,7 @@ def get_all_orders(asset: int) -> list[dict]:
 
 def match_order(
     trader: Trader, asset: int, side: str, price: int, quantity: int
-) -> tuple[list[dict], dict]:
+) -> tuple[list[dict], dict | None]:
     """Matches order and places a new order, if needed."""
     if side == "A":
         matches = Order.objects.filter(
@@ -102,17 +102,17 @@ def match_order(
         if quantity <= 0:
             break
 
-    order_dict = {}
+    order_data = None
     if quantity > 0:
         order = trader.place_order(asset, side, price, quantity)
-        order_dict = {
+        order_data = {
             "order_id": order.id,
             "trader_id": order.trader.id,
             "side": order.side,
             "price": order.price,
             "quantity": order.quantity,
         }
-    return trade_list, order_dict
+    return trade_list, order_data
 
 
 def settle_trades(trades: list[dict]) -> None:
