@@ -116,12 +116,20 @@ def get_game_state(request):
 
 
 @login_required
-def get_leaderboard(request):
+def get_leaderboard(_):
+    """
+    Return the entire every trader's name and portfolio value.
+
+    This list is NOT sorted.
+    """
     traders = Trader.objects.all()
     pairs = [
         (trader.user.username, trader.get_portfolio_value())
         for trader in traders
     ]
-    return JsonResponse(
-        sorted(pairs, key=lambda x: x[1], reverse=True), safe=False, status=200
-    )
+    return JsonResponse(pairs, safe=False, status=200)
+
+
+@login_required
+def render_game(request):
+    return render(request, "game.html")

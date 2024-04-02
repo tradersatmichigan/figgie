@@ -1,50 +1,16 @@
-import { Box } from "@mui/system";
 import React, { useState, useEffect } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 import OrderBook from "./OrderBook";
 
 export default function AssetInterface({
   asset,
   orders,
   setOrders,
-  bids,
-  setBids,
-  asks,
-  setAsks,
+  webSocketConnection,
+  updateIdState,
 }) {
-  const socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-  const [lastUpdateId, setLastUpdateId] = useState(null);
-
-  function updateBids(order, trade) {
-    if (bids[order.price] === trade.quantity) {
-      setBids((prevBids) => {
-        const newBids = { ...prevBids };
-        delete newBids[order.price];
-        return newBids;
-      });
-    } else {
-      setBids((prevBids) => ({
-        ...prevBids,
-        [order.price]: prevBids[order.price] - trade.quantity,
-      }));
-    }
-  }
-
-  function updateAsks(order, trade) {
-    if (asks[order.price] === trade.quantity) {
-      setAsks((prevAsks) => {
-        const newAsks = { ...prevAsks };
-        delete newAsks[order.price];
-        return newAsks;
-      });
-    } else {
-      setAsks((prevAsks) => ({
-        ...prevAsks,
-        [order.price]: prevAsks[order.price] - trade.quantity,
-      }));
-    }
-  }
+  const { sendMessage, lastMessage, readyState } = webSocketConnection;
+  const [lastUpdateId, setLastUpdateId] = updateIdState;
 
   function updateOrders(order, trade) {
     if (order.quantity === trade.quantity) {
@@ -67,11 +33,6 @@ export default function AssetInterface({
   function settleTrades(trades) {
     for (const trade of trades) {
       const order = orders[trade.order_id];
-      if (order.side === "B") {
-        updateBids(order, trade);
-      } else {
-        updateAsks(order, trade);
-      }
       updateOrders(order, trade);
     }
   }
@@ -99,23 +60,22 @@ export default function AssetInterface({
       });
     }
 
-    if (order?.side === "B") {
-      setBids((prevBids) => ({
-        ...prevBids,
-        [order.price]: (bids[order.price] || 0) + order.quantity,
-      }));
-    } else if (order?.side === "A") {
-      setAsks((prevAsks) => ({
-        ...prevAsks,
-        [order.price]: (prevAsks[order.price] || 0) + order.quantity,
-      }));
-    }
-
     const trades = message.trades;
     if (trades !== null) {
       settleTrades(trades);
     }
   }, [lastMessage]);
 
-  return <OrderBook bids={bids} asks={asks} />;
+  /** Return all orders on `side`, aggregated by price */
+  function filterOrders(side) {
+    return Object.values(orders)
+      .filter((order) => order.side === side)
+      .reduce((acc, order) => {
+        const { price, quantity } = order;
+        acc[price] = (acc[price] || 0) + quantity;
+        return acc;
+      }, {});
+  }
+
+  return <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />;
 }

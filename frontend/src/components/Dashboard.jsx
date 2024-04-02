@@ -1,6 +1,8 @@
+import React, { useState } from "react";
+import useWebSocket from "react-use-websocket";
+
 import AssetInterface from "./AssetInterface";
 import Portfolio from "./Portfolio";
-import React, { useState } from "react";
 
 export default function Dashboard() {
   const [orders0, setOrders0] = useState({});
@@ -21,39 +23,38 @@ export default function Dashboard() {
 
   const [cash, setCash] = useState(0);
 
+  const asset = 0;
+  const socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  const webSocket0 = useWebSocket(socketUrl);
+  const updates0 = useState(null);
+
   return (
     <>
-    <AssetInterface
-      asset={0}
-      orders={orders0}
-      setOrders={setOrders0}
-      bids={bids0}
-      setBids={setBids0}
-      asks={asks0}
-      setAsks={setAsks0}
-    />
-    <Portfolio
-      asset0={0}
-      orders0={orders0}
-      bids0={bids0}
-      asks0={asks0}
-      asset1={1}
-      orders1={orders1}
-      bids1={bids1}
-      asks1={asks1}
-      asset2={2}
-      orders2={orders2}
-      bids2={bids2}
-      asks2={asks2}
-      asset3={3}
-      orders3={orders3}
-      bids3={bids3}
-      asks3={asks3}
-    />
-
+      <AssetInterface
+        asset={0}
+        orders={orders0}
+        setOrders={setOrders0}
+        webSocketConnection={webSocket0}
+        updateIdState={updates0}
+      />
+      <Portfolio
+        asset0={0}
+        orders0={orders0}
+        bids0={bids0}
+        asks0={asks0}
+        asset1={1}
+        orders1={orders1}
+        bids1={bids1}
+        asks1={asks1}
+        asset2={2}
+        orders2={orders2}
+        bids2={bids2}
+        asks2={asks2}
+        asset3={3}
+        orders3={orders3}
+        bids3={bids3}
+        asks3={asks3}
+      />
     </>
   );
-  
-
-
 }
