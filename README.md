@@ -57,3 +57,4 @@ Then run the backend with:
 cd backend/
 python manage.py runserver
 ```
+Finally, navigate to http://localhost:8000 (or whatever address:port you use with runserver).
