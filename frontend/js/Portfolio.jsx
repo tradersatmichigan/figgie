@@ -155,7 +155,6 @@ export default function Portfolio({
           </TableBody>
         </Table>
       </TableContainer>
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="exposed positions table">
           <TableHead>
@@ -171,7 +170,6 @@ export default function Portfolio({
                   <CloseIcon sx={{ color: red[500] }} />
                   {bid.type} {bid.amount} @ ${bid.price}
                 </TableCell>
-                {/* Matching asks or placeholder */}
                 {exposedPositions.asks[index] ? (
                   <TableCell>
                     <CloseIcon sx={{ color: red[500] }} />
@@ -184,13 +182,12 @@ export default function Portfolio({
                 )}
               </TableRow>
             ))}
-            {/* If there are more asks than bids, render the remaining asks */}
             {exposedPositions.asks.length > exposedPositions.bids.length &&
               exposedPositions.asks
                 .slice(exposedPositions.bids.length)
                 .map((ask, index) => (
                   <TableRow key={`ask-${index + exposedPositions.bids.length}`}>
-                    <TableCell></TableCell> {/* Empty cell for bids */}
+                    <TableCell></TableCell>
                     <TableCell>
                       <CloseIcon sx={{ color: red[500] }} />
                       {ask.type} {ask.amount} @ ${ask.price}
