@@ -30,7 +30,6 @@ First install [npm](https://www.npmjs.com/) if youdon't already have it.
 Then install dependencies with:
 
 ```shell
-cd frontend/
 npm install
 ```
 
@@ -47,14 +46,12 @@ docker run --rm -p 6379:6379 redis:7
 
 Then build the frontend:
 ```shell
-cd frontend/
-npm run build
+npm start
 ```
 
 Then run the backend with:
 
 ```shell
-cd backend/
 python manage.py runserver
 ```
 Finally, navigate to http://localhost:8000 (or whatever address:port you use with runserver).
