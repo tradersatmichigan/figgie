@@ -11,6 +11,15 @@ export default function AssetInterface({
   setOrders,
   webSocketConnection,
   updateIdState,
+  traderId,
+  amountHeld,
+  setAmountHeld,
+  amountRemaining,
+  setAmountRemaining,
+  cash,
+  setCash,
+  buyingPower,
+  setBuyingPower,
 }) {
   const { sendMessage, lastMessage, readyState } = webSocketConnection;
   const [lastUpdateId, setLastUpdateId] = updateIdState;
@@ -35,12 +44,27 @@ export default function AssetInterface({
 
   function settleTrades(trades) {
     for (const trade of trades) {
+      if (trade.buyerId === traderId) {
+        setAmountHeld(amountHeld + trade.quantity);
+        setCash(cash - trade.price * trade.quantity);
+      } else if (trade.sellerId === traderId) {
+        setAmountHeld(amountHeld - trade.quantity);
+        setCash(cash + trade.price * trade.quantity);
+      }
       const order = orders[trade.orderId];
       updateOrders(order, trade);
     }
   }
 
   function cancelOrder(orderId) {
+    const order = orders[orderId];
+    if (order.traderId === traderId) {
+      if (order.side === "B") {
+        setBuyingPower(buyingPower + order.price * order.quantity);
+      } else {
+        setAmountRemaining(amountRemaining + order.quantity);
+      }
+    }
     setOrders((prevOrders) => {
       const newOrders = { ...prevOrders };
       delete newOrders[orderId];
@@ -61,7 +85,7 @@ export default function AssetInterface({
       alert(message.error);
       return;
     } else {
-      alert("Dropped a message. Should refresh.");
+      console.error("Dropped a message. Should refresh.");
       return;
     }
 
@@ -72,6 +96,13 @@ export default function AssetInterface({
 
     const order = message.order;
     if (order !== null) {
+      if (order.traderId === traderId) {
+        if (order.side === "B") {
+          setBuyingPower(buyingPower - order.price * order.quantity);
+        } else {
+          setAmountRemaining(amountRemaining - order.quantity);
+        }
+      }
       setOrders({
         ...orders,
         [order.orderId]: order,

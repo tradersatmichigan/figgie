@@ -99,7 +99,6 @@ export default function Dashboard() {
             value: entry.value,
           })),
         );
-        console.log(data);
       })
       .catch((error) => console.error(error));
   }
@@ -129,6 +128,15 @@ export default function Dashboard() {
                 setOrders={setOrders0}
                 webSocketConnection={webSocket0}
                 updateIdState={updates0}
+                traderId={traderId}
+                amountHeld={amountHeld0}
+                setAmountHeld={setAmountHeld0}
+                amountRemaining={amountRemaining0}
+                setAmountRemaining={setAmountRemaining0}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
               />
             </Grid>
             <Grid>
@@ -138,6 +146,15 @@ export default function Dashboard() {
                 setOrders={setOrders1}
                 webSocketConnection={webSocket1}
                 updateIdState={updates1}
+                traderId={traderId}
+                amountHeld={amountHeld1}
+                setAmountHeld={setAmountHeld1}
+                amountRemaining={amountRemaining1}
+                setAmountRemaining={setAmountRemaining1}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
               />
             </Grid>
             <Grid>
@@ -147,6 +164,15 @@ export default function Dashboard() {
                 setOrders={setOrders2}
                 webSocketConnection={webSocket2}
                 updateIdState={updates2}
+                traderId={traderId}
+                amountHeld={amountHeld2}
+                setAmountHeld={setAmountHeld2}
+                amountRemaining={amountRemaining2}
+                setAmountRemaining={setAmountRemaining2}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
               />
             </Grid>
             <Grid>
@@ -156,6 +182,15 @@ export default function Dashboard() {
                 setOrders={setOrders3}
                 webSocketConnection={webSocket3}
                 updateIdState={updates3}
+                traderId={traderId}
+                amountHeld={amountHeld3}
+                setAmountHeld={setAmountHeld3}
+                amountRemaining={amountRemaining3}
+                setAmountRemaining={setAmountRemaining3}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
               />
             </Grid>
           </Grid>
