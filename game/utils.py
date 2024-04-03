@@ -49,16 +49,16 @@ def validate_order(
         raise InsufficientAssetsException(asset=asset)
 
 
-def get_all_orders(asset: int) -> list[dict]:
-    return [
-        {
+def get_all_orders(asset: int) -> dict[int, dict[str, int | str]]:
+    return {
+        order.id: {
             "trader_id": order.trader.id,
             "side": order.side,
             "price": order.price,
-            "quantaty": order.quantity,
+            "quantity": order.quantity,
         }
         for order in Order.objects.filter(asset=asset)
-    ]
+    }
 
 
 def match_order(

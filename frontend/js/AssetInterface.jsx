@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 import OrderBook from "./OrderBook";
-import useWebSocket from "react-use-websocket";
+import OrderForm from "./OrderForm";
+import { ReadyState } from "react-use-websocket";
+import Stack from "@mui/material/Stack";
 
 export default function AssetInterface({
   asset,
@@ -42,11 +46,14 @@ export default function AssetInterface({
       return;
     }
     const message = JSON.parse(lastMessage.data);
-
+    console.log(message);
     if (lastUpdateId === null) {
       setLastUpdateId(message.update_id);
     } else if (lastUpdateId + 1 === message.update_id) {
       setLastUpdateId(message.update_id);
+    } else if ("error" in message) {
+      alert(message.error);
+      return;
     } else {
       alert("Dropped a message. Should refresh.");
       return;
@@ -77,5 +84,23 @@ export default function AssetInterface({
       }, {});
   }
 
-  return <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />;
+  const connectionStatusIcon = {
+    [ReadyState.CONNECTING]: <CircularProgress />,
+    [ReadyState.OPEN]: null,
+    [ReadyState.CLOSING]: null,
+    [ReadyState.CLOSED]: null,
+    [ReadyState.UNINSTANTIATED]: null,
+  }[readyState];
+
+  return (
+    <Stack direction="column" spacing={2} alignItems={"center"}>
+      <h3>
+        Asset {asset} {connectionStatusIcon}
+      </h3>
+      <Stack direction="row" spacing={2}>
+        <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />
+        <OrderForm sendMessage={sendMessage} />
+      </Stack>
+    </Stack>
+  );
 }

@@ -94,7 +94,7 @@ def get_game_state(request):
     return JsonResponse(
         {
             "portfolio": {
-                "capital": trader.capital,
+                "cash": trader.capital,
                 "buying_power": trader.buying_power,
                 "assets": [
                     trader.asset_0,

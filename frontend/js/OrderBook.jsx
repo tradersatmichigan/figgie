@@ -23,15 +23,13 @@ export default function OrderBook({ bids, asks }) {
     }));
 
   return (
-    <Box>
-      <Stack direction="row" spacing={2}>
-        <Box sx={{ height: 225, width: 100 }}>
-          <OrderTable side={"Bids"} rows={bidList} />
-        </Box>
-        <Box sx={{ height: 225, width: 100 }}>
-          <OrderTable side={"Asks"} rows={askList} />
-        </Box>
-      </Stack>
-    </Box>
+    <Stack direction="row" spacing={2}>
+      <Box sx={{ height: 225, width: 100 }}>
+        <OrderTable side={"Bids"} rows={bidList} />
+      </Box>
+      <Box sx={{ height: 225, width: 100 }}>
+        <OrderTable side={"Asks"} rows={askList} />
+      </Box>
+    </Stack>
   );
 }
