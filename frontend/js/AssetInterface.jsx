@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import useWebSocket from "react-use-websocket";
+import React, { useEffect, useState } from "react";
 import OrderBook from "./OrderBook";
+import useWebSocket from "react-use-websocket";
 
 export default function AssetInterface({
   asset,
