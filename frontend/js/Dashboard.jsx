@@ -1,31 +1,56 @@
 import React, { useEffect, useState } from "react";
 import AssetInterface from "./AssetInterface";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Unstable_Grid2";
 import Portfolio from "./Portfolio";
+import Positions from "./Positions";
+import Stack from "@mui/material/Stack";
 import useWebSocket from "react-use-websocket";
+import Leaderboard from "./Leaderboard";
 
 export default function Dashboard() {
-  const [orders0, setOrders0] = useState({});
-  const [bids0, setBids0] = useState({});
-  const [asks0, setAsks0] = useState({});
-
-  const [orders1, setOrders1] = useState({});
-  const [bids1, setBids1] = useState({});
-  const [asks1, setAsks1] = useState({});
-
-  const [orders2, setOrders2] = useState({});
-  const [bids2, setBids2] = useState({});
-  const [asks2, setAsks2] = useState({});
-
-  const [orders3, setOrders3] = useState({});
-  const [bids3, setBids3] = useState({});
-  const [asks3, setAsks3] = useState({});
+  const [traderId, setTraderId] = useState(null);
+  const [username, setUsername] = useState("");
 
   const [cash, setCash] = useState(0);
+  const [buyingPower, setBuyingPower] = useState(0);
 
-  const asset = 0;
-  const socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  const [amountHeld0, setAmountHeld0] = useState(0);
+  const [amountHeld1, setAmountHeld1] = useState(0);
+  const [amountHeld2, setAmountHeld2] = useState(0);
+  const [amountHeld3, setAmountHeld3] = useState(0);
+
+  const [amountRemaining0, setAmountRemaining0] = useState(0);
+  const [amountRemaining1, setAmountRemaining1] = useState(0);
+  const [amountRemaining2, setAmountRemaining2] = useState(0);
+  const [amountRemaining3, setAmountRemaining3] = useState(0);
+
+  const [orders0, setOrders0] = useState({});
+  const [orders1, setOrders1] = useState({});
+  const [orders2, setOrders2] = useState({});
+  const [orders3, setOrders3] = useState({});
+
+  const [leaderboard, setLeaderboard] = useState([]);
+
+  let asset = 0;
+  let socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
   const webSocket0 = useWebSocket(socketUrl);
   const updates0 = useState(null);
+
+  asset = 1;
+  socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  const webSocket1 = useWebSocket(socketUrl);
+  const updates1 = useState(null);
+
+  asset = 2;
+  socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  const webSocket2 = useWebSocket(socketUrl);
+  const updates2 = useState(null);
+
+  asset = 3;
+  socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  const webSocket3 = useWebSocket(socketUrl);
+  const updates3 = useState(null);
 
   useEffect(() => {
     fetch("/api/state/", { credentials: "same-origin" })
@@ -34,42 +59,132 @@ export default function Dashboard() {
         return response.json();
       })
       .then((data) => {
-        setOrders0(data.orders[0]);
-        setOrders1(data.orders[0]);
-        setOrders2(data.orders[0]);
-        setOrders3(data.orders[0]);
+        setTraderId(data.traderId);
+        setUsername(data.username);
+
         setCash(data.portfolio.cash);
+        setBuyingPower(data.portfolio.buyingPower);
+
+        setAmountHeld0(data.portfolio.assets[0]);
+        setAmountHeld1(data.portfolio.assets[1]);
+        setAmountHeld2(data.portfolio.assets[2]);
+        setAmountHeld3(data.portfolio.assets[3]);
+
+        setAmountRemaining0(data.portfolio.assetsRemaining[0]);
+        setAmountRemaining1(data.portfolio.assetsRemaining[1]);
+        setAmountRemaining2(data.portfolio.assetsRemaining[2]);
+        setAmountRemaining3(data.portfolio.assetsRemaining[3]);
+
+        setOrders0(data.orders[0]);
+        setOrders1(data.orders[1]);
+        setOrders2(data.orders[2]);
+        setOrders3(data.orders[3]);
       })
       .catch((error) => console.error(error));
+    fetchLeaderboard();
   }, []);
 
-  // <Portfolio
-  //   asset0={0}
-  //   orders0={orders0}
-  //   bids0={bids0}
-  //   asks0={asks0}
-  //   asset1={1}
-  //   orders1={orders1}
-  //   bids1={bids1}
-  //   asks1={asks1}
-  //   asset2={2}
-  //   orders2={orders2}
-  //   bids2={bids2}
-  //   asks2={asks2}
-  //   asset3={3}
-  //   orders3={orders3}
-  //   bids3={bids3}
-  //   asks3={asks3}
-  // />
+  function fetchLeaderboard() {
+    fetch("/api/leaderboard/", { credentials: "same-origin" })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        let id = 1;
+        setLeaderboard(
+          data.map((entry) => ({
+            id: id++,
+            username: entry.username,
+            value: entry.value,
+          })),
+        );
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function sendCancelMessage(orderId, asset) {
+    if (asset < 0 || asset > 3) {
+      return;
+    }
+    const sender = [webSocket0, webSocket1, webSocket2, webSocket3][asset];
+    sender.sendMessage(
+      JSON.stringify({
+        cancel: true,
+        orderId: orderId,
+      }),
+    );
+  }
+
   return (
-    <>
-      <AssetInterface
-        asset={0}
-        orders={orders0}
-        setOrders={setOrders0}
-        webSocketConnection={webSocket0}
-        updateIdState={updates0}
-      />
-    </>
+    <Box>
+      <Stack direction="row" spacing={2}>
+        <Stack spacing={1} width={"auto"}>
+          <Grid container columnSpacing={5} maxWidth={800}>
+            <Grid>
+              <AssetInterface
+                asset={0}
+                orders={orders0}
+                setOrders={setOrders0}
+                webSocketConnection={webSocket0}
+                updateIdState={updates0}
+              />
+            </Grid>
+            <Grid>
+              <AssetInterface
+                asset={1}
+                orders={orders1}
+                setOrders={setOrders1}
+                webSocketConnection={webSocket1}
+                updateIdState={updates1}
+              />
+            </Grid>
+            <Grid>
+              <AssetInterface
+                asset={2}
+                orders={orders2}
+                setOrders={setOrders2}
+                webSocketConnection={webSocket2}
+                updateIdState={updates2}
+              />
+            </Grid>
+            <Grid>
+              <AssetInterface
+                asset={3}
+                orders={orders3}
+                setOrders={setOrders3}
+                webSocketConnection={webSocket3}
+                updateIdState={updates3}
+              />
+            </Grid>
+          </Grid>
+          <Portfolio
+            cash={cash}
+            buyingPower={buyingPower}
+            assets={[amountHeld0, amountHeld1, amountHeld2, amountHeld3]}
+            assetsRemaining={[
+              amountRemaining0,
+              amountRemaining1,
+              amountRemaining2,
+              amountRemaining3,
+            ]}
+          />
+        </Stack>
+        <Stack spacing={2}>
+          <Positions
+            orders={{
+              ...orders0,
+              ...orders1,
+              ...orders2,
+              ...orders3,
+            }}
+            traderId={traderId}
+            sendCancelMessage={sendCancelMessage}
+          />
+          <Leaderboard rows={leaderboard} username={username} />
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import OrderBook from "./OrderBook";
 import OrderForm from "./OrderForm";
-import { ReadyState } from "react-use-websocket";
+import ReadyState from "react-use-websocket";
 import Stack from "@mui/material/Stack";
 
 export default function AssetInterface({
@@ -20,15 +19,15 @@ export default function AssetInterface({
     if (order.quantity === trade.quantity) {
       setOrders((prevOrders) => {
         const newOrders = { ...prevOrders };
-        delete newOrders[trade.order_id];
+        delete newOrders[trade.orderId];
         return newOrders;
       });
     } else {
       setOrders((prevOrders) => ({
         ...prevOrders,
-        [trade.order_id]: {
-          ...prevOrders[trade.order_id],
-          quantity: prevOrders[trade.order_id].quantity - trade.quantity,
+        [trade.orderId]: {
+          ...prevOrders[trade.orderId],
+          quantity: prevOrders[trade.orderId].quantity - trade.quantity,
         },
       }));
     }
@@ -36,9 +35,17 @@ export default function AssetInterface({
 
   function settleTrades(trades) {
     for (const trade of trades) {
-      const order = orders[trade.order_id];
+      const order = orders[trade.orderId];
       updateOrders(order, trade);
     }
+  }
+
+  function cancelOrder(orderId) {
+    setOrders((prevOrders) => {
+      const newOrders = { ...prevOrders };
+      delete newOrders[orderId];
+      return newOrders;
+    });
   }
 
   useEffect(() => {
@@ -46,11 +53,10 @@ export default function AssetInterface({
       return;
     }
     const message = JSON.parse(lastMessage.data);
-    console.log(message);
     if (lastUpdateId === null) {
-      setLastUpdateId(message.update_id);
-    } else if (lastUpdateId + 1 === message.update_id) {
-      setLastUpdateId(message.update_id);
+      setLastUpdateId(message.updateId);
+    } else if (lastUpdateId + 1 === message.updateId) {
+      setLastUpdateId(message.updateId);
     } else if ("error" in message) {
       alert(message.error);
       return;
@@ -59,11 +65,16 @@ export default function AssetInterface({
       return;
     }
 
+    if (message.cancel) {
+      cancelOrder(message.orderId);
+      return;
+    }
+
     const order = message.order;
     if (order !== null) {
       setOrders({
         ...orders,
-        [order.order_id]: order,
+        [order.orderId]: order,
       });
     }
 

@@ -93,16 +93,18 @@ def get_game_state(request):
         return JsonResponse({"error": "No trader account."}, status=403)
     return JsonResponse(
         {
+            "traderId": trader.id,
+            "username": trader.user.username,
             "portfolio": {
                 "cash": trader.capital,
-                "buying_power": trader.buying_power,
+                "buyingPower": trader.buying_power,
                 "assets": [
                     trader.asset_0,
                     trader.asset_1,
                     trader.asset_2,
                     trader.asset_3,
                 ],
-                "assets_remaining": [
+                "assetsRemaining": [
                     trader.asset_0_remaining,
                     trader.asset_1_remaining,
                     trader.asset_2_remaining,
@@ -118,15 +120,18 @@ def get_game_state(request):
 @login_required
 def get_leaderboard(_):
     """
-    Return the entire every trader's name and portfolio value.
-
-    This list is NOT sorted.
+    Return the entire every trader's name and portfolio value in
+    descending order.
     """
     traders = Trader.objects.all()
     pairs = [
-        (trader.user.username, trader.get_portfolio_value())
+        {
+            "username": trader.user.username,
+            "value": trader.get_portfolio_value(),
+        }
         for trader in traders
     ]
+    pairs = sorted(pairs, key=lambda x: x["value"], reverse=True)
     return JsonResponse(pairs, safe=False, status=200)
 
 

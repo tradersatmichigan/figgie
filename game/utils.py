@@ -52,7 +52,8 @@ def validate_order(
 def get_all_orders(asset: int) -> dict[int, dict[str, int | str]]:
     return {
         order.id: {
-            "trader_id": order.trader.id,
+            "asset": asset,
+            "traderId": order.trader.id,
             "side": order.side,
             "price": order.price,
             "quantity": order.quantity,
@@ -81,12 +82,12 @@ def match_order(
         q_matched = min(quantity, order.quantity)
         trade_list.append(
             {
-                "order_id": order.id,
+                "orderId": order.id,
                 "asset": asset,
-                "buyer_id": (
+                "buyerId": (
                     order.trader.id if order.side == "B" else trader.id
                 ),
-                "seller_id": (
+                "sellerId": (
                     order.trader.id if order.side == "A" else trader.id
                 ),
                 "price": order.price,
@@ -106,8 +107,9 @@ def match_order(
     if quantity > 0:
         order = trader.place_order(asset, side, price, quantity)
         order_data = {
-            "order_id": order.id,
-            "trader_id": order.trader.id,
+            "orderId": order.id,
+            "asset": order.asset,
+            "traderId": order.trader.id,
             "side": order.side,
             "price": order.price,
             "quantity": order.quantity,
@@ -117,19 +119,21 @@ def match_order(
 
 def settle_trades(trades: list[dict]) -> None:
     for trade in trades:
-        buyer: Trader = Trader.objects.get(id=trade["buyer_id"])
-        seller: Trader = Trader.objects.get(id=trade["seller_id"])
+        buyer: Trader = Trader.objects.get(id=trade["buyerId"])
+        seller: Trader = Trader.objects.get(id=trade["sellerId"])
         buyer.buy(trade["asset"], trade["price"], trade["quantity"])
         seller.sell(trade["asset"], trade["price"], trade["quantity"])
 
 
-def cancel_order(order_id: int, user_id: int) -> None:
+def cancel_order(orderId: int, userId: int) -> None:
     try:
-        order: Order = Order.objects.get(id=order_id)
-        trader: Trader = Trader.objects.get(id=order.trader)
+        order: Order = Order.objects.get(id=orderId)
+        trader: Trader = Trader.objects.get(id=order.trader.id)
     except (Order.DoesNotExist, Trader.DoesNotExist):
         return
-    if trader.user.id != user_id:
+    if trader.user.id != userId:
+        print(trader.user.id)
+        print(f"userId: {userId}")
         return
 
     if order.side == "B":

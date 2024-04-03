@@ -36,15 +36,15 @@ class AssetConsumer(WebsocketConsumer):
         global update_count
         order = json.loads(text_data)
         if "cancel" in order and order["cancel"]:
-            cancel_order(order["order_id"], self.scope["user"])
+            cancel_order(order["orderId"], self.scope["user"].id)
 
             async_to_sync(self.channel_layer.group_send)(
                 self.asset_group_name,
                 {
                     "type": "cancel.message",
-                    "update_id": update_count,
+                    "updateId": update_count,
                     "cancel": True,
-                    "order_id": order["order_id"],
+                    "orderId": order["orderId"],
                 },
             )
             update_count += 1
@@ -85,7 +85,7 @@ class AssetConsumer(WebsocketConsumer):
             self.asset_group_name,
             {
                 "type": "order.message",
-                "update_id": update_count,
+                "updateId": update_count,
                 "trades": trades or None,
                 "order": order,
             },
@@ -94,7 +94,7 @@ class AssetConsumer(WebsocketConsumer):
 
     def order_message(self, event):
         data = {
-            "update_id": event["update_id"],
+            "updateId": event["updateId"],
             "trades": event["trades"],
             "order": event["order"],
         }
@@ -102,8 +102,8 @@ class AssetConsumer(WebsocketConsumer):
 
     def cancel_message(self, event):
         data = {
-            "update_id": event["update_id"],
+            "updateId": event["updateId"],
             "cancel": event["type"],
-            "order_id": event["order_id"],
+            "orderId": event["orderId"],
         }
         self.send(text_data=json.dumps(data))
