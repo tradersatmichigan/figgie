@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import AssetInterface from "./AssetInterface";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
+import Leaderboard from "./Leaderboard";
 import Portfolio from "./Portfolio";
 import Positions from "./Positions";
 import Stack from "@mui/material/Stack";
 import useWebSocket from "react-use-websocket";
-import Leaderboard from "./Leaderboard";
 
 export default function Dashboard() {
   const [traderId, setTraderId] = useState(null);
@@ -33,22 +33,22 @@ export default function Dashboard() {
   const [leaderboard, setLeaderboard] = useState([]);
 
   let asset = 0;
-  let socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  let socketUrl = `ws://${window.location.host}/ws/market/${asset}/`;
   const webSocket0 = useWebSocket(socketUrl);
   const updates0 = useState(null);
 
   asset = 1;
-  socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  socketUrl = `ws://${window.location.host}/ws/market/${asset}/`;
   const webSocket1 = useWebSocket(socketUrl);
   const updates1 = useState(null);
 
   asset = 2;
-  socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  socketUrl = `ws://${window.location.host}/ws/market/${asset}/`;
   const webSocket2 = useWebSocket(socketUrl);
   const updates2 = useState(null);
 
   asset = 3;
-  socketUrl = `ws://localhost:8000/ws/market/${asset}/`;
+  socketUrl = `ws://${window.location.host}/ws/market/${asset}/`;
   const webSocket3 = useWebSocket(socketUrl);
   const updates3 = useState(null);
 
@@ -217,6 +217,7 @@ export default function Dashboard() {
             traderId={traderId}
             sendCancelMessage={sendCancelMessage}
           />
+          <h3 style={{ textAlign: "center" }}>Leaderboard</h3>
           <Leaderboard rows={leaderboard} username={username} />
         </Stack>
       </Stack>

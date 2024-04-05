@@ -24,14 +24,14 @@ export default function Positions({ orders, traderId, sendCancelMessage }) {
     <Stack spacing={2} alignItems={"center"}>
       <h3>Positions</h3>
       <Stack direction="row" spacing={2}>
-        <Box sx={{ height: 225, width: 220 }}>
+        <Box sx={{ height: 225, width: 215 }}>
           <PositionTable
             rows={bids}
             side={"Bids"}
             sendCancelMessage={sendCancelMessage}
           />
         </Box>
-        <Box sx={{ height: 225, width: 220 }}>
+        <Box sx={{ height: 225, width: 215 }}>
           <PositionTable
             rows={asks}
             side={"Asks"}

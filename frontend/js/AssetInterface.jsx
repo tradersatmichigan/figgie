@@ -58,6 +58,9 @@ export default function AssetInterface({
 
   function cancelOrder(orderId) {
     const order = orders[orderId];
+    if (order === null) {
+      return;
+    }
     if (order.traderId === traderId) {
       if (order.side === "B") {
         setBuyingPower(buyingPower + order.price * order.quantity);

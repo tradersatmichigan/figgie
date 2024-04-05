@@ -1,21 +1,27 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
+import Stack from "@mui/material/Stack";
 
 const columns = [
   {
     field: "id",
     headerName: "Rank",
-    width: 55,
+    width: 56,
+    // flex: 1,
+    align: "right",
+    headerAlign: "right",
   },
   {
     field: "username",
     headerName: "Username",
-    width: 200,
+    // width: 200,
+    flex: 1,
   },
   {
     field: "value",
     headerName: "Portfolio Value",
-    width: 200,
+    // width: 146,
+    flex: 1,
     type: "number",
     align: "right",
     valueFormatter: (value) =>
@@ -59,6 +65,7 @@ export default function Leaderboard({ rows, username }) {
       getRowClassName={(params) =>
         params.row.username === username ? "leaderboard-user-row" : null
       }
+      disableColumnResize
     />
   );
 }
