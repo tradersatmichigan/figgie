@@ -44,14 +44,23 @@ export default function AssetInterface({
 
   function settleTrades(trades) {
     for (const trade of trades) {
+      const order = orders[trade.orderId];
       if (trade.buyerId === traderId) {
         setAmountHeld(amountHeld + trade.quantity);
         setCash(cash - trade.price * trade.quantity);
+        if (order.traderId !== traderId) {
+          // If current user fulfills existing order
+          setAmountRemaining(amountRemaining + trade.quantity);
+          setBuyingPower(buyingPower - trade.price * trade.quantity);
+        }
       } else if (trade.sellerId === traderId) {
         setAmountHeld(amountHeld - trade.quantity);
         setCash(cash + trade.price * trade.quantity);
+        if (order.traderId !== traderId) {
+          setAmountRemaining(amountRemaining - trade.quantity);
+          setBuyingPower(buyingPower + trade.price * trade.quantity);
+        }
       }
-      const order = orders[trade.orderId];
       updateOrders(order, trade);
     }
   }
