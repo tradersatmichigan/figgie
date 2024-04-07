@@ -16,7 +16,7 @@ export default function OrderForm({ sendMessage }) {
   const isValid = (value) => {
     return (
       !isNaN(value) &&
-      parseInt(Number(value)) === value &&
+      parseInt(Number(value)) == value && // eslint-disable-line eqeqeq
       !isNaN(parseInt(value, 10)) &&
       parseInt(value, 10) > 0
     );
