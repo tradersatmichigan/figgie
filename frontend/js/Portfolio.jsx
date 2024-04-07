@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import React from "react";
 import Stack from "@mui/material/Stack";
@@ -8,7 +7,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { FormatBold } from "@mui/icons-material";
 
 export default function Portfolio({
   cash,

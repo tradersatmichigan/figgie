@@ -46,19 +46,19 @@ export default function AssetInterface({
     for (const trade of trades) {
       const order = orders[trade.orderId];
       if (trade.buyerId === traderId) {
-        setAmountHeld(amountHeld + trade.quantity);
-        setCash(cash - trade.price * trade.quantity);
+        setAmountHeld((prev) => prev + trade.quantity);
+        setCash((prev) => prev - trade.price * trade.quantity);
         if (order.traderId !== traderId) {
           // If current user fulfills existing order
-          setAmountRemaining(amountRemaining + trade.quantity);
-          setBuyingPower(buyingPower - trade.price * trade.quantity);
+          setAmountRemaining((prev) => prev + trade.quantity);
+          setBuyingPower((prev) => prev - trade.price * trade.quantity);
         }
       } else if (trade.sellerId === traderId) {
-        setAmountHeld(amountHeld - trade.quantity);
-        setCash(cash + trade.price * trade.quantity);
+        setAmountHeld((prev) => prev - trade.quantity);
+        setCash((prev) => prev + trade.price * trade.quantity);
         if (order.traderId !== traderId) {
-          setAmountRemaining(amountRemaining - trade.quantity);
-          setBuyingPower(buyingPower + trade.price * trade.quantity);
+          setAmountRemaining((prev) => prev - trade.quantity);
+          setBuyingPower((prev) => prev + trade.price * trade.quantity);
         }
       }
       updateOrders(order, trade);
@@ -72,9 +72,9 @@ export default function AssetInterface({
     }
     if (order.traderId === traderId) {
       if (order.side === "B") {
-        setBuyingPower(buyingPower + order.price * order.quantity);
+        setBuyingPower((prev) => prev + order.price * order.quantity);
       } else {
-        setAmountRemaining(amountRemaining + order.quantity);
+        setAmountRemaining((prev) => prev + order.quantity);
       }
     }
     setOrders((prevOrders) => {
@@ -110,9 +110,9 @@ export default function AssetInterface({
     if (order !== null) {
       if (order.traderId === traderId) {
         if (order.side === "B") {
-          setBuyingPower(buyingPower - order.price * order.quantity);
+          setBuyingPower((prev) => prev - order.price * order.quantity);
         } else {
-          setAmountRemaining(amountRemaining - order.quantity);
+          setAmountRemaining((prev) => prev - order.quantity);
         }
       }
       setOrders({
