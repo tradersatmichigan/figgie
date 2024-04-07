@@ -42,16 +42,10 @@ export default function OrderTable({ side, rows }) {
       disableRowSelectionOnClick
       disableColumnSorting
       disableColumnMenu
-      // columnGroupingModel={[
-      //   {
-      //     groupId: side,
-      //     children: [{ field: "price" }, { field: "quantity" }],
-      //     headerAlign: "center",
-      //   },
-      // ]}
       rowHeight={25}
       columnHeaderHeight={25}
       hideFooter
+      // We hopefully won't need this, but will uncomment for production
       // filterModel={{
       //   items: [{ field: "quantity", operator: ">", value: "0" }],
       // }}

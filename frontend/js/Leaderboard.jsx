@@ -1,26 +1,22 @@
+import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
-import Stack from "@mui/material/Stack";
 
 const columns = [
   {
     field: "id",
     headerName: "Rank",
     width: 56,
-    // flex: 1,
     align: "right",
     headerAlign: "right",
   },
   {
     field: "username",
     headerName: "Username",
-    // width: 200,
     flex: 1,
   },
   {
     field: "value",
     headerName: "Portfolio Value",
-    // width: 146,
     flex: 1,
     type: "number",
     align: "right",
@@ -29,7 +25,34 @@ const columns = [
   },
 ];
 
-export default function Leaderboard({ rows, username }) {
+export default function Leaderboard({ username }) {
+  const [leaderboard, setLeaderboard] = useState([]);
+
+  function fetchLeaderboard() {
+    fetch("/api/leaderboard/", { credentials: "same-origin" })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        let id = 1;
+        setLeaderboard(
+          data.map((entry) => ({
+            id: id++,
+            username: entry.username,
+            value: entry.value,
+          })),
+        );
+      })
+      .catch((error) => console.error(error));
+  }
+
+  useState(() => {
+    fetchLeaderboard();
+    const interval = setInterval(fetchLeaderboard, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <DataGrid
       sx={{
@@ -37,7 +60,7 @@ export default function Leaderboard({ rows, username }) {
           backgroundColor: "info.dark",
         },
       }}
-      rows={rows}
+      rows={leaderboard}
       columns={columns}
       initialState={{
         sorting: {
@@ -48,19 +71,9 @@ export default function Leaderboard({ rows, username }) {
       disableRowSelectionOnClick
       disableColumnSorting
       disableColumnMenu
-      // columnGroupingModel={[
-      //   {
-      //     groupId: side,
-      //     children: [{ field: "price" }, { field: "quantity" }],
-      //     headerAlign: "center",
-      //   },
-      // ]}
       rowHeight={25}
       columnHeaderHeight={25}
       hideFooter
-      // filterModel={{
-      //   items: [{ field: "quantity", operator: ">", value: "0" }],
-      // }}
       disableColumnFilter
       getRowClassName={(params) =>
         params.row.username === username ? "leaderboard-user-row" : null

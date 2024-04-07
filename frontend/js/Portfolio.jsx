@@ -8,6 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { FormatBold } from "@mui/icons-material";
 
 export default function Portfolio({
   cash,
@@ -34,12 +35,24 @@ export default function Portfolio({
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell align="right">Asset 0</TableCell>
-              <TableCell align="right">Asset 1</TableCell>
-              <TableCell align="right">Asset 2</TableCell>
-              <TableCell align="right">Asset 3</TableCell>
-              <TableCell align="right">ETF Bonus</TableCell>
-              <TableCell align="right">Cash</TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Asset 0
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Asset 1
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Asset 2
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Asset 3
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                ETF Bonus
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Cash
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -47,7 +60,7 @@ export default function Portfolio({
               key={"cash"}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                 Amount Held
               </TableCell>
               {assets.map((amount, idx) => (
@@ -62,7 +75,7 @@ export default function Portfolio({
               key={"values"}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                 Value
               </TableCell>
               {assetsRemaining.map((amount, idx) => (
@@ -79,7 +92,7 @@ export default function Portfolio({
               key={"buyingPower"}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                 Buying/Selling Power
               </TableCell>
               {assetsRemaining.map((amount, idx) => (

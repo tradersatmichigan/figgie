@@ -67,18 +67,6 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
       disableRowSelectionOnClick
       disableColumnSorting
       disableColumnMenu
-      // columnGroupingModel={[
-      //   {
-      //     groupId: side,
-      //     children: [
-      //       { field: "cancel" },
-      //       { field: "asset" },
-      //       { field: "price" },
-      //       { field: "quantity" },
-      //     ],
-      //     headerAlign: "center",
-      //   },
-      // ]}
       rowHeight={25}
       columnHeaderHeight={25}
       hideFooter

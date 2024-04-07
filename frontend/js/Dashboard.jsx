@@ -30,8 +30,6 @@ export default function Dashboard() {
   const [orders2, setOrders2] = useState({});
   const [orders3, setOrders3] = useState({});
 
-  const [leaderboard, setLeaderboard] = useState([]);
-
   let asset = 0;
   let socketUrl = `ws://${window.location.host}/ws/market/${asset}/`;
   const webSocket0 = useWebSocket(socketUrl);
@@ -81,27 +79,7 @@ export default function Dashboard() {
         setOrders3(data.orders[3]);
       })
       .catch((error) => console.error(error));
-    fetchLeaderboard();
   }, []);
-
-  function fetchLeaderboard() {
-    fetch("/api/leaderboard/", { credentials: "same-origin" })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        let id = 1;
-        setLeaderboard(
-          data.map((entry) => ({
-            id: id++,
-            username: entry.username,
-            value: entry.value,
-          })),
-        );
-      })
-      .catch((error) => console.error(error));
-  }
 
   function sendCancelMessage(orderId, asset) {
     if (asset < 0 || asset > 3) {
@@ -218,7 +196,7 @@ export default function Dashboard() {
             sendCancelMessage={sendCancelMessage}
           />
           <h3 style={{ textAlign: "center" }}>Leaderboard</h3>
-          <Leaderboard rows={leaderboard} username={username} />
+          <Leaderboard username={username} />
         </Stack>
       </Stack>
     </Box>
