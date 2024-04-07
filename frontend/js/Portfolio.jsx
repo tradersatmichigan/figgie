@@ -15,78 +15,86 @@ export default function Portfolio({
   assets,
   assetsRemaining,
 }) {
+  const etfCount = Math.min(...assets);
+  function value() {
+    return (
+      10 * assets[0] +
+      20 * assets[1] +
+      30 * assets[2] +
+      40 * assets[3] +
+      100 * etfCount +
+      cash
+    );
+  }
   return (
-    <Box maxWidth={750} maxHeight={100}>
-      <Stack direction="row" spacing={1}>
-        <Stack spacing={1} width={300} height={100} alignItems={"center"}>
-          <h3>Portfolio</h3>
-          <TableContainer component={Paper}>
-            <Table width={300} size="small" aria-label="simple table">
-              <TableBody>
-                <TableRow
-                  key={"cash"}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    Cash
-                  </TableCell>
-                  <TableCell align="right">${cash}</TableCell>
-                </TableRow>
-                <TableRow
-                  key={"buyingPower"}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    Buying Power
-                  </TableCell>
-                  <TableCell align="right">${buyingPower}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Stack>
-        <TableContainer component={Paper}>
-          <Table size="small" aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="right">Asset 0</TableCell>
-                <TableCell align="right">Asset 1</TableCell>
-                <TableCell align="right">Asset 2</TableCell>
-                <TableCell align="right">Asset 3</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow
-                key={"cash"}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Amount Held
+    <Stack direction="column" spacing={2} alignItems={"center"}>
+      <h3>Portfolio: ${value().toLocaleString()}</h3>
+      <TableContainer component={Paper}>
+        <Table size="small" aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell align="right">Asset 0</TableCell>
+              <TableCell align="right">Asset 1</TableCell>
+              <TableCell align="right">Asset 2</TableCell>
+              <TableCell align="right">Asset 3</TableCell>
+              <TableCell align="right">ETF Bonus</TableCell>
+              <TableCell align="right">Cash</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow
+              key={"cash"}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Amount Held
+              </TableCell>
+              {assets.map((amount, idx) => (
+                <TableCell align="right" key={`assets${idx}`}>
+                  {amount.toLocaleString()}
                 </TableCell>
-                {assets.map((amount, idx) => (
-                  <TableCell align="right" key={`assets${idx}`}>
-                    {amount}
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow
-                key={"buyingPower"}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Amount Remaining
+              ))}
+              <TableCell align="right">{etfCount.toLocaleString()}</TableCell>
+              <TableCell align="right">${cash.toLocaleString()}</TableCell>
+            </TableRow>
+            <TableRow
+              key={"values"}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Value
+              </TableCell>
+              {assetsRemaining.map((amount, idx) => (
+                <TableCell align="right" key={`assetsRemaining${idx}`}>
+                  ${(10 * (idx + 1) * amount).toLocaleString()}
                 </TableCell>
-                {assetsRemaining.map((amount, idx) => (
-                  <TableCell align="right" key={`assetsRemaining${idx}`}>
-                    {amount}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Stack>
-    </Box>
+              ))}
+              <TableCell align="right">
+                ${(100 * etfCount).toLocaleString()}
+              </TableCell>
+              <TableCell align="right">${cash.toLocaleString()}</TableCell>
+            </TableRow>
+            <TableRow
+              key={"buyingPower"}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                Buying/Selling Power
+              </TableCell>
+              {assetsRemaining.map((amount, idx) => (
+                <TableCell align="right" key={`assetsRemaining${idx}`}>
+                  {amount.toLocaleString()}
+                </TableCell>
+              ))}
+              <TableCell align="right"></TableCell>
+              <TableCell align="right">
+                ${buyingPower.toLocaleString()}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Stack>
   );
 }
