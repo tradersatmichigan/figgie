@@ -37,7 +37,7 @@ export default function OrderForm({ sendMessage }) {
   };
 
   return (
-    <Stack spacing={1.8} width={100} height={250}>
+    <Stack spacing={2.2} width={100} height={250}>
       <FormControl>
         <ToggleButtonGroup
           value={side}
