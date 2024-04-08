@@ -24,10 +24,10 @@ export default function OrderBook({ bids, asks }) {
 
   return (
     <Stack direction="row" spacing={2}>
-      <Box sx={{ height: 225, width: 102 }}>
+      <Box>
         <OrderTable side={"Bids"} rows={bidList} />
       </Box>
-      <Box sx={{ height: 225, width: 102 }}>
+      <Box>
         <OrderTable side={"Asks"} rows={askList} />
       </Box>
     </Stack>

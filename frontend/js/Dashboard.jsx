@@ -95,110 +95,115 @@ export default function Dashboard() {
   }
 
   return (
-    <Box>
-      <Stack direction="row" spacing={2}>
-        <Stack spacing={1} width={"auto"}>
-          <Grid container columnSpacing={5} maxWidth={800}>
-            <Grid>
-              <AssetInterface
-                asset={0}
-                orders={orders0}
-                setOrders={setOrders0}
-                webSocketConnection={webSocket0}
-                updateIdState={updates0}
-                traderId={traderId}
-                amountHeld={amountHeld0}
-                setAmountHeld={setAmountHeld0}
-                amountRemaining={amountRemaining0}
-                setAmountRemaining={setAmountRemaining0}
-                cash={cash}
-                setCash={setCash}
-                buyingPower={buyingPower}
-                setBuyingPower={setBuyingPower}
-              />
-            </Grid>
-            <Grid>
-              <AssetInterface
-                asset={1}
-                orders={orders1}
-                setOrders={setOrders1}
-                webSocketConnection={webSocket1}
-                updateIdState={updates1}
-                traderId={traderId}
-                amountHeld={amountHeld1}
-                setAmountHeld={setAmountHeld1}
-                amountRemaining={amountRemaining1}
-                setAmountRemaining={setAmountRemaining1}
-                cash={cash}
-                setCash={setCash}
-                buyingPower={buyingPower}
-                setBuyingPower={setBuyingPower}
-              />
-            </Grid>
-            <Grid>
-              <AssetInterface
-                asset={2}
-                orders={orders2}
-                setOrders={setOrders2}
-                webSocketConnection={webSocket2}
-                updateIdState={updates2}
-                traderId={traderId}
-                amountHeld={amountHeld2}
-                setAmountHeld={setAmountHeld2}
-                amountRemaining={amountRemaining2}
-                setAmountRemaining={setAmountRemaining2}
-                cash={cash}
-                setCash={setCash}
-                buyingPower={buyingPower}
-                setBuyingPower={setBuyingPower}
-              />
-            </Grid>
-            <Grid>
-              <AssetInterface
-                asset={3}
-                orders={orders3}
-                setOrders={setOrders3}
-                webSocketConnection={webSocket3}
-                updateIdState={updates3}
-                traderId={traderId}
-                amountHeld={amountHeld3}
-                setAmountHeld={setAmountHeld3}
-                amountRemaining={amountRemaining3}
-                setAmountRemaining={setAmountRemaining3}
-                cash={cash}
-                setCash={setCash}
-                buyingPower={buyingPower}
-                setBuyingPower={setBuyingPower}
-              />
-            </Grid>
+    <Grid container columns={3} padding={4}>
+      <Grid xs={2}>
+        <Grid
+          container
+          columns={2}
+          spacing={5}
+          justifyContent={"space-between"}
+          alignItems={"stretch"}
+        >
+          <Grid xs={1}>
+            <AssetInterface
+              asset={0}
+              orders={orders0}
+              setOrders={setOrders0}
+              webSocketConnection={webSocket0}
+              updateIdState={updates0}
+              traderId={traderId}
+              amountHeld={amountHeld0}
+              setAmountHeld={setAmountHeld0}
+              amountRemaining={amountRemaining0}
+              setAmountRemaining={setAmountRemaining0}
+              cash={cash}
+              setCash={setCash}
+              buyingPower={buyingPower}
+              setBuyingPower={setBuyingPower}
+            />
           </Grid>
-          <Portfolio
-            cash={cash}
-            buyingPower={buyingPower}
-            assets={[amountHeld0, amountHeld1, amountHeld2, amountHeld3]}
-            assetsRemaining={[
-              amountRemaining0,
-              amountRemaining1,
-              amountRemaining2,
-              amountRemaining3,
-            ]}
-          />
-        </Stack>
-        <Stack spacing={2}>
-          <Positions
-            orders={{
-              ...orders0,
-              ...orders1,
-              ...orders2,
-              ...orders3,
-            }}
-            traderId={traderId}
-            sendCancelMessage={sendCancelMessage}
-          />
-          <h3 style={{ textAlign: "center" }}>Leaderboard</h3>
-          <Leaderboard username={username} />
-        </Stack>
-      </Stack>
-    </Box>
+          <Grid xs={1}>
+            <AssetInterface
+              asset={1}
+              orders={orders1}
+              setOrders={setOrders1}
+              webSocketConnection={webSocket1}
+              updateIdState={updates1}
+              traderId={traderId}
+              amountHeld={amountHeld1}
+              setAmountHeld={setAmountHeld1}
+              amountRemaining={amountRemaining1}
+              setAmountRemaining={setAmountRemaining1}
+              cash={cash}
+              setCash={setCash}
+              buyingPower={buyingPower}
+              setBuyingPower={setBuyingPower}
+            />
+          </Grid>
+          <Grid xs={1}>
+            <AssetInterface
+              asset={2}
+              orders={orders2}
+              setOrders={setOrders2}
+              webSocketConnection={webSocket2}
+              updateIdState={updates2}
+              traderId={traderId}
+              amountHeld={amountHeld2}
+              setAmountHeld={setAmountHeld2}
+              amountRemaining={amountRemaining2}
+              setAmountRemaining={setAmountRemaining2}
+              cash={cash}
+              setCash={setCash}
+              buyingPower={buyingPower}
+              setBuyingPower={setBuyingPower}
+            />
+          </Grid>
+          <Grid xs={1}>
+            <AssetInterface
+              asset={3}
+              orders={orders3}
+              setOrders={setOrders3}
+              webSocketConnection={webSocket3}
+              updateIdState={updates3}
+              traderId={traderId}
+              amountHeld={amountHeld3}
+              setAmountHeld={setAmountHeld3}
+              amountRemaining={amountRemaining3}
+              setAmountRemaining={setAmountRemaining3}
+              cash={cash}
+              setCash={setCash}
+              buyingPower={buyingPower}
+              setBuyingPower={setBuyingPower}
+            />
+          </Grid>
+          <Grid xs={2}>
+            <Portfolio
+              cash={cash}
+              buyingPower={buyingPower}
+              assets={[amountHeld0, amountHeld1, amountHeld2, amountHeld3]}
+              assetsRemaining={[
+                amountRemaining0,
+                amountRemaining1,
+                amountRemaining2,
+                amountRemaining3,
+              ]}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid xs={1} padding={2}>
+        <Positions
+          orders={{
+            ...orders0,
+            ...orders1,
+            ...orders2,
+            ...orders3,
+          }}
+          traderId={traderId}
+          sendCancelMessage={sendCancelMessage}
+        />
+        <Leaderboard username={username} />
+      </Grid>
+    </Grid>
   );
 }

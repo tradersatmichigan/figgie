@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
@@ -54,31 +55,34 @@ export default function Leaderboard({ username }) {
   }, []);
 
   return (
-    <DataGrid
-      sx={{
-        "& .leaderboard-user-row": {
-          backgroundColor: "info.dark",
-        },
-      }}
-      rows={leaderboard}
-      columns={columns}
-      initialState={{
-        sorting: {
-          sortModel: [{ field: "value", sort: "desc" }],
-        },
-      }}
-      pageSizeOptions={[5]}
-      disableRowSelectionOnClick
-      disableColumnSorting
-      disableColumnMenu
-      rowHeight={25}
-      columnHeaderHeight={25}
-      hideFooter
-      disableColumnFilter
-      getRowClassName={(params) =>
-        params.row.username === username ? "leaderboard-user-row" : null
-      }
-      disableColumnResize
-    />
+    <Box maxHeight={500}>
+      <h3>Leaderboard</h3>
+      <DataGrid
+        sx={{
+          "& .leaderboard-user-row": {
+            backgroundColor: "info.dark",
+          },
+        }}
+        rows={leaderboard}
+        columns={columns}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "value", sort: "desc" }],
+          },
+        }}
+        pageSizeOptions={[5]}
+        disableRowSelectionOnClick
+        disableColumnSorting
+        disableColumnMenu
+        rowHeight={25}
+        columnHeaderHeight={25}
+        hideFooter
+        disableColumnFilter
+        getRowClassName={(params) =>
+          params.row.username === username ? "leaderboard-user-row" : null
+        }
+        disableColumnResize
+      />
+    </Box>
   );
 }

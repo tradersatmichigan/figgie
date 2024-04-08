@@ -1,3 +1,11 @@
+html,
+body,
+main,
+#root,
+#root > div {
+  height: 100%;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +43,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+h3 {
+  text-align: center;
 }

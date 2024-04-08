@@ -125,7 +125,7 @@ export default function AssetInterface({
     if (trades !== null) {
       settleTrades(trades);
     }
-  }, [lastMessage]);
+  }, [lastMessage]); //eslint-disable-line react-hooks/exhaustive-deps
 
   /** Return all orders on `side`, aggregated by price */
   function filterOrders(side) {

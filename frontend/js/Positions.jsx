@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import PositionTable from "./PositionTable";
 import React from "react";
 import Stack from "@mui/material/Stack";
@@ -21,24 +21,24 @@ export default function Positions({ orders, traderId, sendCancelMessage }) {
       quantity: order.quantity,
     }));
   return (
-    <Stack spacing={2} alignItems={"center"}>
+    <Stack direction="column" spacing={2} alignItems={"center"}>
       <h3>Positions</h3>
-      <Stack direction="row" spacing={2}>
-        <Box sx={{ height: 225, width: 215 }}>
+      <Grid container columns={2} spacing={2} alignItems="stretch">
+        <Grid xs={1} paddingRight={1} height={250}>
           <PositionTable
             rows={bids}
             side={"Bids"}
             sendCancelMessage={sendCancelMessage}
           />
-        </Box>
-        <Box sx={{ height: 225, width: 215 }}>
+        </Grid>
+        <Grid xs={1} paddingLeft={1} height={250}>
           <PositionTable
             rows={asks}
             side={"Asks"}
             sendCancelMessage={sendCancelMessage}
           />
-        </Box>
-      </Stack>
+        </Grid>
+      </Grid>
     </Stack>
   );
 }

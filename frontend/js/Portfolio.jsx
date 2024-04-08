@@ -34,6 +34,9 @@ export default function Portfolio({
             <TableRow>
               <TableCell></TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Cash
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Asset 0
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
@@ -48,9 +51,6 @@ export default function Portfolio({
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 ETF Bonus
               </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Cash
-              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -61,13 +61,13 @@ export default function Portfolio({
               <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                 Amount Held
               </TableCell>
+              <TableCell align="right">${cash.toLocaleString()}</TableCell>
               {assets.map((amount, idx) => (
                 <TableCell align="right" key={`assets${idx}`}>
                   {amount.toLocaleString()}
                 </TableCell>
               ))}
               <TableCell align="right">{etfCount.toLocaleString()}</TableCell>
-              <TableCell align="right">${cash.toLocaleString()}</TableCell>
             </TableRow>
             <TableRow
               key={"values"}
@@ -76,6 +76,7 @@ export default function Portfolio({
               <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                 Value
               </TableCell>
+              <TableCell align="right">${cash.toLocaleString()}</TableCell>
               {assetsRemaining.map((amount, idx) => (
                 <TableCell align="right" key={`assetsRemaining${idx}`}>
                   ${(10 * (idx + 1) * amount).toLocaleString()}
@@ -84,7 +85,6 @@ export default function Portfolio({
               <TableCell align="right">
                 ${(100 * etfCount).toLocaleString()}
               </TableCell>
-              <TableCell align="right">${cash.toLocaleString()}</TableCell>
             </TableRow>
             <TableRow
               key={"buyingPower"}
@@ -93,15 +93,15 @@ export default function Portfolio({
               <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                 Buying/Selling Power
               </TableCell>
+              <TableCell align="right">
+                ${buyingPower.toLocaleString()}
+              </TableCell>
               {assetsRemaining.map((amount, idx) => (
                 <TableCell align="right" key={`assetsRemaining${idx}`}>
                   {amount.toLocaleString()}
                 </TableCell>
               ))}
               <TableCell align="right"></TableCell>
-              <TableCell align="right">
-                ${buyingPower.toLocaleString()}
-              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

@@ -14,7 +14,8 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
     {
       field: "cancel",
       headerName: "",
-      width: 50,
+      minWidth: 50,
+      flex: 1,
       align: "center",
       renderCell: (params) => {
         const onClick = (e) => {
@@ -30,7 +31,8 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
     {
       field: "asset",
       headerName: "Asset",
-      width: 60,
+      minWidth: 60,
+      flex: 1,
       type: "number",
       align: "center",
       headerAlign: "center",
@@ -38,7 +40,8 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
     {
       field: "quantity",
       headerName: "Q",
-      width: 50,
+      minWidth: 50,
+      flex: 1,
       type: "number",
       align: "center",
       headerAlign: "center",
@@ -46,7 +49,8 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
     {
       field: "price",
       headerName: "P",
-      width: 50,
+      minWidth: 50,
+      flex: 1,
       type: "number",
       align: "center",
       headerAlign: "center",
