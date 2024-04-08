@@ -14,7 +14,7 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
     {
       field: "cancel",
       headerName: "",
-      minWidth: 50,
+      maxWidth: 50,
       flex: 1,
       align: "center",
       renderCell: (params) => {

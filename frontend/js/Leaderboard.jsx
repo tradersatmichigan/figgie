@@ -55,7 +55,7 @@ export default function Leaderboard({ username }) {
   }, []);
 
   return (
-    <Box maxHeight={500}>
+    <Box height={435}>
       <h3>Leaderboard</h3>
       <DataGrid
         sx={{

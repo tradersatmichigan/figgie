@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
 import OrderBook from "./OrderBook";
 import OrderForm from "./OrderForm";
 import ReadyState from "react-use-websocket";
-import Stack from "@mui/material/Stack";
 
 export default function AssetInterface({
   asset,
@@ -147,14 +148,18 @@ export default function AssetInterface({
   }[readyState];
 
   return (
-    <Stack direction="column" spacing={2} alignItems={"center"}>
+    <Box>
       <h3>
         Asset {asset} {connectionStatusIcon}
       </h3>
-      <Stack direction="row" spacing={2}>
-        <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />
-        <OrderForm sendMessage={sendMessage} />
-      </Stack>
-    </Stack>
+      <Grid container columns={3} spacing={2}>
+        <Grid item xs height={250}>
+          <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />
+        </Grid>
+        <Grid item xs="auto" height={250}>
+          <OrderForm sendMessage={sendMessage} />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }

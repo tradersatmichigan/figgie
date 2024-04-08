@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import OrderTable from "./OrderTable";
 import React from "react";
-import Stack from "@mui/material/Stack";
 
 export default function OrderBook({ bids, asks }) {
   let id = 1;
@@ -23,13 +23,13 @@ export default function OrderBook({ bids, asks }) {
     }));
 
   return (
-    <Stack direction="row" spacing={2}>
-      <Box>
+    <Grid container columns={2} spacing={2}>
+      <Grid item xs={1} height={250}>
         <OrderTable side={"Bids"} rows={bidList} />
-      </Box>
-      <Box>
+      </Grid>
+      <Grid item xs={1} height={250}>
         <OrderTable side={"Asks"} rows={askList} />
-      </Box>
-    </Stack>
+      </Grid>
+    </Grid>
   );
 }

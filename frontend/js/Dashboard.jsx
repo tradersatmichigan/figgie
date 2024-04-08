@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AssetInterface from "./AssetInterface";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Leaderboard from "./Leaderboard";
 import Portfolio from "./Portfolio";
 import Positions from "./Positions";
-import Stack from "@mui/material/Stack";
 import useWebSocket from "react-use-websocket";
 
 export default function Dashboard() {
@@ -95,16 +93,16 @@ export default function Dashboard() {
   }
 
   return (
-    <Grid container columns={3} padding={4}>
-      <Grid xs={2}>
+    <Grid container columns={3} paddingX={4}>
+      <Grid item xs={2}>
         <Grid
           container
           columns={2}
-          spacing={5}
+          paddingLeft={1}
           justifyContent={"space-between"}
           alignItems={"stretch"}
         >
-          <Grid xs={1}>
+          <Grid item xs={1} paddingX={2}>
             <AssetInterface
               asset={0}
               orders={orders0}
@@ -122,7 +120,7 @@ export default function Dashboard() {
               setBuyingPower={setBuyingPower}
             />
           </Grid>
-          <Grid xs={1}>
+          <Grid item xs={1} paddingX={2}>
             <AssetInterface
               asset={1}
               orders={orders1}
@@ -140,7 +138,7 @@ export default function Dashboard() {
               setBuyingPower={setBuyingPower}
             />
           </Grid>
-          <Grid xs={1}>
+          <Grid item xs={1} paddingX={2}>
             <AssetInterface
               asset={2}
               orders={orders2}
@@ -158,7 +156,7 @@ export default function Dashboard() {
               setBuyingPower={setBuyingPower}
             />
           </Grid>
-          <Grid xs={1}>
+          <Grid item xs={1} paddingX={2}>
             <AssetInterface
               asset={3}
               orders={orders3}
@@ -176,7 +174,7 @@ export default function Dashboard() {
               setBuyingPower={setBuyingPower}
             />
           </Grid>
-          <Grid xs={2}>
+          <Grid item xs={2} paddingX={2}>
             <Portfolio
               cash={cash}
               buyingPower={buyingPower}
@@ -191,7 +189,7 @@ export default function Dashboard() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid xs={1} padding={2}>
+      <Grid item xs={1} paddingLeft={2}>
         <Positions
           orders={{
             ...orders0,

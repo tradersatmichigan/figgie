@@ -1,6 +1,6 @@
+import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import React from "react";
-import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -26,7 +26,7 @@ export default function Portfolio({
     );
   }
   return (
-    <Stack direction="column" spacing={2} alignItems={"center"}>
+    <Box>
       <h3>Portfolio: ${value().toLocaleString()}</h3>
       <TableContainer component={Paper}>
         <Table size="small" aria-label="simple table">
@@ -106,6 +106,6 @@ export default function Portfolio({
           </TableBody>
         </Table>
       </TableContainer>
-    </Stack>
+    </Box>
   );
 }
