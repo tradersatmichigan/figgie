@@ -79,6 +79,7 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
       slots={{
         toolbar: PositionTableTitle,
       }}
+      isRowSelectable={(data) => data.row !== undefined}
     />
   );
 }

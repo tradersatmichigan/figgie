@@ -21,6 +21,7 @@ export default function AssetInterface({
   setCash,
   buyingPower,
   setBuyingPower,
+  forceUpdate,
 }) {
   const { sendMessage, lastMessage, readyState } = webSocketConnection;
   const [lastUpdateId, setLastUpdateId] = updateIdState;
@@ -68,11 +69,11 @@ export default function AssetInterface({
 
   function cancelOrder(orderId) {
     const order = orders[orderId];
-    if (order === null) {
+    if (order === null || order === undefined) {
       return;
     }
-    if (order.traderId === traderId) {
-      if (order.side === "B") {
+    if (order?.traderId === traderId) {
+      if (order?.side === "B") {
         setBuyingPower((prev) => prev + order.price * order.quantity);
       } else {
         setAmountRemaining((prev) => prev + order.quantity);
@@ -98,8 +99,8 @@ export default function AssetInterface({
       alert(message.error);
       return;
     } else {
-      console.error("Dropped a message. Should refresh.");
-      return;
+      forceUpdate();
+      setLastUpdateId(message.updateId);
     }
 
     if (message.cancel) {

@@ -1,5 +1,7 @@
 import Box from "@mui/material/Box";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import PositionTable from "./PositionTable";
 import React from "react";
 

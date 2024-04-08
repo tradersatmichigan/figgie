@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import AssetInterface from "./AssetInterface";
 import Grid from "@mui/material/Unstable_Grid2";
 import Leaderboard from "./Leaderboard";
@@ -48,7 +48,7 @@ export default function Dashboard() {
   const webSocket3 = useWebSocket(socketUrl);
   const updates3 = useState(null);
 
-  useEffect(() => {
+  function getState() {
     fetch("/api/state/", { credentials: "same-origin" })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
@@ -77,9 +77,9 @@ export default function Dashboard() {
         setOrders3(data.orders[3]);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }
 
-  function sendCancelMessage(orderId, asset) {
+  const sendCancelMessage = useCallback((orderId, asset) => {
     if (asset < 0 || asset > 3) {
       return;
     }
@@ -90,7 +90,11 @@ export default function Dashboard() {
         orderId: orderId,
       }),
     );
-  }
+  }, []);
+
+  useEffect(() => {
+    getState();
+  }, []);
 
   return (
     <Grid container columns={3} paddingX={4}>
@@ -118,6 +122,7 @@ export default function Dashboard() {
               setCash={setCash}
               buyingPower={buyingPower}
               setBuyingPower={setBuyingPower}
+              forceUpdate={getState}
             />
           </Grid>
           <Grid item xs={1} paddingX={2}>
@@ -136,6 +141,7 @@ export default function Dashboard() {
               setCash={setCash}
               buyingPower={buyingPower}
               setBuyingPower={setBuyingPower}
+              forceUpdate={getState}
             />
           </Grid>
           <Grid item xs={1} paddingX={2}>
@@ -154,6 +160,7 @@ export default function Dashboard() {
               setCash={setCash}
               buyingPower={buyingPower}
               setBuyingPower={setBuyingPower}
+              forceUpdate={getState}
             />
           </Grid>
           <Grid item xs={1} paddingX={2}>
@@ -172,6 +179,7 @@ export default function Dashboard() {
               setCash={setCash}
               buyingPower={buyingPower}
               setBuyingPower={setBuyingPower}
+              forceUpdate={getState}
             />
           </Grid>
           <Grid item xs={2} paddingX={2}>
