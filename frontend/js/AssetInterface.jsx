@@ -109,7 +109,7 @@ export default function AssetInterface({
     }
 
     const order = message.order;
-    if (order !== null) {
+    if (order !== null && order !== undefined) {
       if (order.traderId === traderId) {
         if (order.side === "B") {
           setBuyingPower((prev) => prev - order.price * order.quantity);
@@ -124,7 +124,7 @@ export default function AssetInterface({
     }
 
     const trades = message.trades;
-    if (trades !== null) {
+    if (trades !== null && trades !== undefined) {
       settleTrades(trades);
     }
   }, [lastMessage]); //eslint-disable-line react-hooks/exhaustive-deps

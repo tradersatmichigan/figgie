@@ -77,7 +77,7 @@ export default function Portfolio({
                 Value
               </TableCell>
               <TableCell align="right">${cash.toLocaleString()}</TableCell>
-              {assetsRemaining.map((amount, idx) => (
+              {assets.map((amount, idx) => (
                 <TableCell align="right" key={`assetsRemaining${idx}`}>
                   ${(10 * (idx + 1) * amount).toLocaleString()}
                 </TableCell>

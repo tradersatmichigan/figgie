@@ -43,7 +43,7 @@ class Trader(models.Model):
             case 0:
                 return self.asset_0_remaining
             case 1:
-                return self.asset_2_remaining
+                return self.asset_1_remaining
             case 2:
                 return self.asset_2_remaining
             case 3:
@@ -51,7 +51,9 @@ class Trader(models.Model):
             case _:
                 raise KeyError
 
-    def buy(self, asset: int, price: int, quantity: int) -> None:
+    def buy(
+        self, asset: int, price: int, quantity: int, oringinator: bool
+    ) -> None:
         match asset:
             case 0:
                 self.asset_0 += quantity
@@ -64,9 +66,24 @@ class Trader(models.Model):
             case _:
                 raise KeyError
         self.capital -= quantity * price
+        if not oringinator:
+            match asset:
+                case 0:
+                    self.asset_0_remaining += quantity
+                case 1:
+                    self.asset_1_remaining += quantity
+                case 2:
+                    self.asset_2_remaining += quantity
+                case 3:
+                    self.asset_3_remaining += quantity
+                case _:
+                    raise KeyError
+            self.capital -= quantity * price
         self.save()
 
-    def sell(self, asset: int, price: int, quantity: int) -> None:
+    def sell(
+        self, asset: int, price: int, quantity: int, oringinator: bool
+    ) -> None:
         match asset:
             case 0:
                 self.asset_0 -= quantity
@@ -79,6 +96,19 @@ class Trader(models.Model):
             case _:
                 raise KeyError
         self.capital += quantity * price
+        if not oringinator:
+            match asset:
+                case 0:
+                    self.asset_0_remaining -= quantity
+                case 1:
+                    self.asset_1_remaining -= quantity
+                case 2:
+                    self.asset_2_remaining -= quantity
+                case 3:
+                    self.asset_3_remaining -= quantity
+                case _:
+                    raise KeyError
+            self.buying_power += quantity * price
         self.save()
 
     def place_order(self, asset: int, side: str, price: int, quantity: int):

@@ -121,8 +121,19 @@ def settle_trades(trades: list[dict]) -> None:
     for trade in trades:
         buyer: Trader = Trader.objects.get(id=trade["buyerId"])
         seller: Trader = Trader.objects.get(id=trade["sellerId"])
-        buyer.buy(trade["asset"], trade["price"], trade["quantity"])
-        seller.sell(trade["asset"], trade["price"], trade["quantity"])
+        order: Order = Order.objects.get(id=trade["orderId"])
+        buyer.buy(
+            trade["asset"],
+            trade["price"],
+            trade["quantity"],
+            order.trader == buyer,
+        )
+        seller.sell(
+            trade["asset"],
+            trade["price"],
+            trade["quantity"],
+            order.trader == seller,
+        )
 
 
 def cancel_order(orderId: int, userId: int) -> None:

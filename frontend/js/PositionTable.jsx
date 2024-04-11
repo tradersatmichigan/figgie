@@ -12,7 +12,7 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
 
   const columns = [
     {
-      field: "cancel",
+      field: "id",
       headerName: "",
       maxWidth: 50,
       flex: 1,
