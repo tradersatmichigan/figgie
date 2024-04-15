@@ -50,17 +50,18 @@ export default function AssetInterface({
       if (trade.buyerId === traderId) {
         setAmountHeld((prev) => prev + trade.quantity);
         setCash((prev) => prev - trade.price * trade.quantity);
+        setAmountRemaining((prev) => prev + trade.quantity);
         if (order.traderId !== traderId) {
           // If current user fulfills existing order
-          setAmountRemaining((prev) => prev + trade.quantity);
+          // I.e., not the originator
           setBuyingPower((prev) => prev - trade.price * trade.quantity);
         }
       } else if (trade.sellerId === traderId) {
         setAmountHeld((prev) => prev - trade.quantity);
         setCash((prev) => prev + trade.price * trade.quantity);
+        setBuyingPower((prev) => prev + trade.price * trade.quantity);
         if (order.traderId !== traderId) {
           setAmountRemaining((prev) => prev - trade.quantity);
-          setBuyingPower((prev) => prev + trade.price * trade.quantity);
         }
       }
       updateOrders(order, trade);
@@ -158,7 +159,11 @@ export default function AssetInterface({
           <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />
         </Grid>
         <Grid item xs="auto" height={250}>
-          <OrderForm sendMessage={sendMessage} />
+          <OrderForm
+            sendMessage={sendMessage}
+            buyingPower={buyingPower}
+            amountRemaining={amountRemaining}
+          />
         </Grid>
       </Grid>
     </Box>

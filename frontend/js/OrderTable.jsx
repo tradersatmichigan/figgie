@@ -4,14 +4,6 @@ import TableTitle from "./TableTitle";
 
 const columns = [
   {
-    field: "quantity",
-    headerName: "Q",
-    flex: 1,
-    type: "number",
-    align: "center",
-    headerAlign: "center",
-  },
-  {
     field: "price",
     headerName: "P",
     flex: 1,
@@ -20,6 +12,14 @@ const columns = [
     headerAlign: "center",
     valueFormatter: (value) =>
       value == null ? "" : `$${value.toLocaleString()}`,
+  },
+  {
+    field: "quantity",
+    headerName: "Q",
+    flex: 1,
+    type: "number",
+    align: "center",
+    headerAlign: "center",
   },
 ];
 

@@ -38,15 +38,6 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
       headerAlign: "center",
     },
     {
-      field: "quantity",
-      headerName: "Q",
-      minWidth: 50,
-      flex: 1,
-      type: "number",
-      align: "center",
-      headerAlign: "center",
-    },
-    {
       field: "price",
       headerName: "P",
       minWidth: 50,
@@ -56,6 +47,15 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
       headerAlign: "center",
       valueFormatter: (value) =>
         value == null ? "" : `$${value.toLocaleString()}`,
+    },
+    {
+      field: "quantity",
+      headerName: "Q",
+      minWidth: 50,
+      flex: 1,
+      type: "number",
+      align: "center",
+      headerAlign: "center",
     },
   ];
   return (

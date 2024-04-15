@@ -8,7 +8,11 @@ import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-export default function OrderForm({ sendMessage }) {
+export default function OrderForm({
+  sendMessage,
+  buyingPower,
+  amountRemaining,
+}) {
   const [side, setSide] = useState("B");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -22,18 +26,37 @@ export default function OrderForm({ sendMessage }) {
     );
   };
 
+  const validateBid = (bidPrice, bidQuantity) => {
+    return parseInt(bidPrice) * parseInt(bidQuantity) <= buyingPower;
+  };
+
+  const validateAsk = (askQuantity) => {
+    return parseInt(askQuantity) <= amountRemaining;
+  };
+
   const submitOrder = () => {
-    if ((side === "B" || side === "A") && isValid(price) && isValid(quantity)) {
-      sendMessage(
-        JSON.stringify({
-          side: side,
-          price: price,
-          quantity: quantity,
-        }),
-      );
-    } else {
-      alert("Invalid order! Not placed.");
+    if (!isValid(price) || !isValid(quantity)) {
+      alert("Invalid order syntax. Price and quantity must be integers.");
+      return;
     }
+    if (side !== "B" && side !== "A") {
+      alert("Must select order side.");
+      return;
+    }
+    if (side === "B" && !validateBid(price, quantity)) {
+      alert("Not enough buying power for order.");
+      return;
+    } else if (side === "A" && !validateAsk(quantity)) {
+      alert("Not enough selling power for order.");
+      return;
+    }
+    sendMessage(
+      JSON.stringify({
+        side: side,
+        price: price,
+        quantity: quantity,
+      }),
+    );
   };
 
   return (

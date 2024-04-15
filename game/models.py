@@ -57,33 +57,27 @@ class Trader(models.Model):
         match asset:
             case 0:
                 self.asset_0 += quantity
+                self.asset_0_remaining += quantity
             case 1:
                 self.asset_1 += quantity
+                self.asset_1_remaining += quantity
             case 2:
                 self.asset_2 += quantity
+                self.asset_2_remaining += quantity
             case 3:
                 self.asset_3 += quantity
+                self.asset_3_remaining += quantity
             case _:
                 raise KeyError
         self.capital -= quantity * price
         if not oringinator:
-            match asset:
-                case 0:
-                    self.asset_0_remaining += quantity
-                case 1:
-                    self.asset_1_remaining += quantity
-                case 2:
-                    self.asset_2_remaining += quantity
-                case 3:
-                    self.asset_3_remaining += quantity
-                case _:
-                    raise KeyError
-            self.capital -= quantity * price
+            self.buying_power -= quantity * price
         self.save()
 
     def sell(
         self, asset: int, price: int, quantity: int, oringinator: bool
     ) -> None:
+        print(oringinator)
         match asset:
             case 0:
                 self.asset_0 -= quantity
@@ -96,6 +90,7 @@ class Trader(models.Model):
             case _:
                 raise KeyError
         self.capital += quantity * price
+        self.buying_power += quantity * price
         if not oringinator:
             match asset:
                 case 0:
@@ -108,7 +103,6 @@ class Trader(models.Model):
                     self.asset_3_remaining -= quantity
                 case _:
                     raise KeyError
-            self.buying_power += quantity * price
         self.save()
 
     def place_order(self, asset: int, side: str, price: int, quantity: int):

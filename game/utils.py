@@ -84,6 +84,7 @@ def match_order(
             {
                 "orderId": order.id,
                 "asset": asset,
+                "originSide": order.side,
                 "buyerId": (
                     order.trader.id if order.side == "B" else trader.id
                 ),
@@ -119,20 +120,20 @@ def match_order(
 
 def settle_trades(trades: list[dict]) -> None:
     for trade in trades:
+        print(trade)
         buyer: Trader = Trader.objects.get(id=trade["buyerId"])
         seller: Trader = Trader.objects.get(id=trade["sellerId"])
-        order: Order = Order.objects.get(id=trade["orderId"])
         buyer.buy(
             trade["asset"],
             trade["price"],
             trade["quantity"],
-            order.trader == buyer,
+            trade["originSide"] == "B",
         )
         seller.sell(
             trade["asset"],
             trade["price"],
             trade["quantity"],
-            order.trader == seller,
+            trade["originSide"] == "A",
         )
 
 
