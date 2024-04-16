@@ -9,6 +9,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 export default function OrderForm({
+  asset,
   sendMessage,
   buyingPower,
   amountRemaining,
@@ -67,19 +68,20 @@ export default function OrderForm({
           exclusive
           onChange={(event, newSide) => setSide(newSide)}
           aria-label="text alignment"
+          id={`side-selector-${asset}`}
         >
-          <ToggleButton value="B" aria-label="bid">
+          <ToggleButton value="B" aria-label="bid" id={`bid-button-${asset}`}>
             Bid
           </ToggleButton>
-          <ToggleButton value="A" aria-label="ask">
+          <ToggleButton value="A" aria-label="ask" id={`ask-button-${asset}`}>
             Ask
           </ToggleButton>
         </ToggleButtonGroup>
       </FormControl>
       <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-        <InputLabel htmlFor="standard-adornment-price">Price</InputLabel>
+        <InputLabel htmlFor={`price-field-${asset}`}>Price</InputLabel>
         <Input
-          id="standard-adornment-price"
+          id={`price-field-${asset}`}
           startAdornment={
             <InputAdornment position="start" type="">
               $
@@ -93,9 +95,9 @@ export default function OrderForm({
         />
       </FormControl>
       <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-        <InputLabel htmlFor="standard-adornment-quantity">Quantity</InputLabel>
+        <InputLabel htmlFor={`quantity-field-${asset}`}>Quantity</InputLabel>
         <Input
-          id="standard-adornment-quantity"
+          id={`quantity-field-${asset}`}
           type="number"
           value={quantity}
           onChange={(event) => {
@@ -103,7 +105,11 @@ export default function OrderForm({
           }}
         />
       </FormControl>
-      <Button variant="outlined" onClick={submitOrder}>
+      <Button
+        variant="outlined"
+        onClick={submitOrder}
+        id={`submit-button-${asset}`}
+      >
         Order
       </Button>
     </Stack>

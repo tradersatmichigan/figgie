@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 import OrderTable from "./OrderTable";
 import React from "react";
 
-export default function OrderBook({ bids, asks }) {
+export default function OrderBook({ asset, bids, asks }) {
   let id = 1;
   const bidList = Object.entries(bids)
     .filter(([price, quantity]) => price > 0)
@@ -22,11 +22,11 @@ export default function OrderBook({ bids, asks }) {
     }));
 
   return (
-    <Grid container columns={2} spacing={2}>
-      <Grid item xs={1} height={250}>
+    <Grid container columns={2} spacing={2} id={`order-book-${asset}`}>
+      <Grid item xs={1} height={250} id={`bid-table-${asset}`}>
         <OrderTable side={"Bids"} rows={bidList} />
       </Grid>
-      <Grid item xs={1} height={250}>
+      <Grid item xs={1} height={250} id={`ask-table-${asset}`}>
         <OrderTable side={"Asks"} rows={askList} />
       </Grid>
     </Grid>

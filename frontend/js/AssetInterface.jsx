@@ -156,10 +156,15 @@ export default function AssetInterface({
       </h3>
       <Grid container columns={3} spacing={2}>
         <Grid item xs height={250}>
-          <OrderBook bids={filterOrders("B")} asks={filterOrders("A")} />
+          <OrderBook
+            asset={asset}
+            bids={filterOrders("B")}
+            asks={filterOrders("A")}
+          />
         </Grid>
         <Grid item xs="auto" height={250}>
           <OrderForm
+            asset={asset}
             sendMessage={sendMessage}
             buyingPower={buyingPower}
             amountRemaining={amountRemaining}
