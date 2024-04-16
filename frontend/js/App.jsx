@@ -10,6 +10,9 @@ const darkTheme = createTheme({
   },
 });
 
+export const assetNames = ["Dressing", "Rye", "Swiss", "Pastrami"];
+export const assetAbbreviations = ["D", "R", "S", "P"];
+
 export default function App() {
   return (
     <ThemeProvider theme={darkTheme}>

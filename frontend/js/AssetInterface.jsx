@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import OrderBook from "./OrderBook";
 import OrderForm from "./OrderForm";
 import ReadyState from "react-use-websocket";
+import { assetNames } from "./App";
 
 export default function AssetInterface({
   asset,
@@ -152,7 +153,7 @@ export default function AssetInterface({
   return (
     <Box>
       <h3>
-        Asset {asset} {connectionStatusIcon}
+        {assetNames[asset]} {connectionStatusIcon}
       </h3>
       <Grid container columns={3} spacing={2}>
         <Grid item xs height={250}>

@@ -7,6 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { assetNames } from "./App";
 
 export default function Portfolio({
   cash,
@@ -36,20 +37,13 @@ export default function Portfolio({
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Cash
               </TableCell>
+              {assetNames.map((name, idx) => (
+                <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                  {name} (${(idx + 1) * 10})
+                </TableCell>
+              ))}
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Asset 0
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Asset 1
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Asset 2
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Asset 3
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                ETF Bonus
+                Reuben Bonus ($100)
               </TableCell>
             </TableRow>
           </TableHead>

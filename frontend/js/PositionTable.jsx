@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import React from "react";
 import TableTitle from "./TableTitle";
+import { assetAbbreviations } from "./App";
 import { red } from "@mui/material/colors";
 
 export default function PositionTable({ rows, side, sendCancelMessage }) {
@@ -36,6 +37,7 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
       type: "number",
       align: "center",
       headerAlign: "center",
+      valueFormatter: (value) => assetAbbreviations[value],
     },
     {
       field: "price",
@@ -58,6 +60,7 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
       headerAlign: "center",
     },
   ];
+
   return (
     <DataGrid
       rows={rows}
