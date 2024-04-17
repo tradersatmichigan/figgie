@@ -38,7 +38,7 @@ npm install
 > Note: This is very scuffed currently, but will be improved upon completion of the project.
 > We are planning to containerize the project for easy of use and portability.
 
-We need to run redis in the background, we'll do this using docker:
+We need to run redis in the background, we'll do this using docker (Docker Desktop should be running in the background):
 
 ```shell
 docker run --rm -p 6379:6379 redis:7
