@@ -112,7 +112,7 @@ export default function Dashboard() {
         rowSpacing={0}
         alignItems="flex-start"
       >
-        <Grid xs={2}>
+        <Grid item xs={2}>
           <Grid
             container
             columns={2}
@@ -120,7 +120,7 @@ export default function Dashboard() {
             justifyContent={"space-between"}
             alignItems={"stretch"}
           >
-            <Grid xs={1} paddingX={2}>
+            <Grid item xs={1} paddingX={2}>
               <AssetInterface
                 asset={0}
                 orders={orders0}
@@ -139,7 +139,7 @@ export default function Dashboard() {
                 forceUpdate={getState}
               />
             </Grid>
-            <Grid xs={1} paddingX={2}>
+            <Grid item xs={1} paddingX={2}>
               <AssetInterface
                 asset={1}
                 orders={orders1}
@@ -158,7 +158,7 @@ export default function Dashboard() {
                 forceUpdate={getState}
               />
             </Grid>
-            <Grid xs={1} paddingX={2}>
+            <Grid item xs={1} paddingX={2}>
               <AssetInterface
                 asset={2}
                 orders={orders2}
@@ -177,7 +177,7 @@ export default function Dashboard() {
                 forceUpdate={getState}
               />
             </Grid>
-            <Grid xs={1} paddingX={2}>
+            <Grid item xs={1} paddingX={2}>
               <AssetInterface
                 asset={3}
                 orders={orders3}
@@ -196,7 +196,7 @@ export default function Dashboard() {
                 forceUpdate={getState}
               />
             </Grid>
-            <Grid xs={2} paddingX={2}>
+            <Grid item xs={2} paddingX={2}>
               <Portfolio
                 cash={cash}
                 buyingPower={buyingPower}
@@ -211,7 +211,7 @@ export default function Dashboard() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid xs={1} paddingLeft={2}>
+        <Grid item xs={1} paddingLeft={2}>
           <Positions
             orders={{
               ...orders0,
