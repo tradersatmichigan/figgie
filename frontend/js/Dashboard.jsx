@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AssetInterface from "./AssetInterface";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import Leaderboard from "./Leaderboard";
 import Portfolio from "./Portfolio";
 import Positions from "./Positions";

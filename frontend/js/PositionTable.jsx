@@ -1,5 +1,5 @@
 import CancelIcon from "@mui/icons-material/Cancel";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import IconButton from "@mui/material/IconButton";
 import React from "react";
 import TableTitle from "./TableTitle";

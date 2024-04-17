@@ -1,4 +1,4 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import React from "react";
 import TableTitle from "./TableTitle";
 

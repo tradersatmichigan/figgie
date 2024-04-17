@@ -1,23 +1,19 @@
 const path = require("path");
-const webpack = require("webpack-cli")
 
 module.exports = {
-  mode: "development",
   entry: "./frontend/js/index.js",
   output: {
-    path: path.join(__dirname, "/static/js/"),
     filename: "bundle.js",
+    path: path.join(__dirname, "/static/js/"),
   },
-  devtool: "source-map",
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
         loader: "babel-loader",
+        exclude: /node_modules/,
         options: {
           presets: ["@babel/preset-env", "@babel/preset-react"],
-          plugins: ["@babel/transform-runtime"],
         },
       },
       {
@@ -28,11 +24,14 @@ module.exports = {
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
+        exclude: /node_modules/,
       },
     ],
   },
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
+  optimization: {
+    usedExports: true,
+  },
 };
-

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid/DataGrid";
 
 const columns = [
   {
@@ -50,7 +50,7 @@ export default function Leaderboard({ username }) {
 
   useState(() => {
     fetchLeaderboard();
-    const interval = setInterval(fetchLeaderboard, 5000);
+    const interval = setInterval(fetchLeaderboard, 15000);
     return () => clearInterval(interval);
   }, []);
 
