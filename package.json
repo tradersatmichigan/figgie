@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mui/system": "^5.15.15",
     "css-loader": "^6.10.0",
     "react": "^18.2.0",
     "style-loader": "^3.3.4"
