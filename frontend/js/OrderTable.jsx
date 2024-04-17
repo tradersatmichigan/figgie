@@ -54,6 +54,7 @@ export default function OrderTable({ side, rows }) {
       slots={{
         toolbar: OrderTableTitle,
       }}
+      localeText={{ noRowsLabel: `No ${side.toLowerCase()}` }}
     />
   );
 }

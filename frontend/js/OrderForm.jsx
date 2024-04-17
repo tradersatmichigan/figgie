@@ -7,6 +7,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { assetNames } from "./App";
 
 export default function OrderForm({
   asset,
@@ -48,7 +49,7 @@ export default function OrderForm({
       alert("Not enough buying power for order.");
       return;
     } else if (side === "A" && !validateAsk(quantity)) {
-      alert("Not enough selling power for order.");
+      alert(`Not enough ${assetNames[asset]} selling power for order.`);
       return;
     }
     sendMessage(

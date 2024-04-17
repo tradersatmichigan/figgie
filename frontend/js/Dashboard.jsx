@@ -98,6 +98,15 @@ export default function Dashboard() {
 
   return (
     <Grid container columns={3} paddingX={4}>
+      <Grid xs={3}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src="/static/images/logo-zingers-white.png"
+            alt="Zingers logo"
+            height={100}
+          />
+        </div>
+      </Grid>
       <Grid xs={2}>
         <Grid
           container

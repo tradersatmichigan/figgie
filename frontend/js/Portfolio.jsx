@@ -38,7 +38,7 @@ export default function Portfolio({
                 Cash
               </TableCell>
               {assetNames.map((name, idx) => (
-                <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                <TableCell key={idx} align="right" sx={{ fontWeight: "bold" }}>
                   {name} (${(idx + 1) * 10})
                 </TableCell>
               ))}

@@ -83,6 +83,7 @@ export default function PositionTable({ rows, side, sendCancelMessage }) {
         toolbar: PositionTableTitle,
       }}
       isRowSelectable={(data) => data.row !== undefined}
+      localeText={{ noRowsLabel: `No ${side.toLowerCase()}` }}
     />
   );
 }

@@ -1,74 +1,106 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-{% load static %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css" rel="stylesheet">
-{% if user.is_authenticated %}
-
-<div class="flex items-stretch min-h-screen bg-gray-100">
-  <!-- Sidebar -->
-  <div class="flex flex-col w-1/4 bg-white shadow-md">
-    <div class="flex-grow p-6">
-      <div class="flex flex-col items-center space-y-6 pb-10">
-        <img src="{% static 'images/logo-zingers.png' %}" alt="Logo" class="w-60 h-24">  <!-- Logo displayed -->
+  {% load static %}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css"
+        rel="stylesheet">
+  {% if user.is_authenticated %}
+    <div class="flex items-stretch min-h-screen bg-gray-100">
+      <!-- Sidebar -->
+      <div class="flex flex-col w-1/4 bg-white shadow-md">
+        <div class="flex-grow p-6">
+          <div class="flex flex-col items-center space-y-6 pb-10">
+            <img src="{% static 'images/logo-zingers.png' %}"
+                 alt="Logo"
+                 class="w-60 h-24">
+            <!-- Logo displayed -->
+          </div>
+          <div>
+            <h2 class="inline text-4xl text-gray-700"
+                style="font-family: 'Helvetica Neue', sans-serif">
+              <strong>Hello, {{ user.username }}.</strong>
+            </h2>
+            <p>
+              Zinger's is a market making ETF game.
+              You'll start with one ingredient (dressing, rye, swiss, or
+              pastrami) and some cash. Acquire one of each ingredient, and you
+              have a reuben.
+            </p>
+            <br />
+            <p>
+              Place bids and asks on the different ingredients to begin trading.
+              If your order matches one or more existing orders, trades will
+              automatically be executed with price-time priority.
+            </p>
+            <br />
+            <p>
+              Individually, dressing, rye, swiss, and pastrami are worth
+              $10, $20, $30, and $40, respectively. But, each reuben in your
+              portfolio grants you an $100 bonus, in addition to the value
+              of the individual ingredients.
+            </p>
+          </div>
+        </div>
+        <!-- Bottom Button Group -->
+        <div class="p-6">
+          <a href="{% url 'game' %}"
+             class="block w-full px-4 py-2 mb-2 text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition-colors duration-200 transform">
+            Enter Game
+          </a>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit"
+                    class="block w-full px-4 py-2 text-center text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600 transition-colors duration-200 transform">
+              Log Out
+            </button>
+          </form>
+        </div>
       </div>
-      <div>
-        <h2 class="inline text-4xl text-gray-700" style="font-family: 'Helvetica Neue', sans-serif;">
-          <strong>Hello, {{ user.username }}.</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          quis nostrud exercitation ullamco 
-        </h2>
+      <!-- Main Content Area -->
+      <div class="w-3/4 flex items-center justify-center">
+        <img src="{% static 'images/michigan-stadium.png' %}"
+             alt="Main Scene"
+             class="w-full h-full">
+        <!-- Adjust path as needed -->
       </div>
     </div>
-    <!-- Bottom Button Group -->
-    <div class="p-6">
-      <a href="{% url 'game' %}"
-        class="block w-full px-4 py-2 mb-2 text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition-colors duration-200 transform">
-        Enter Game
-      </a>
-      <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit"
-          class="block w-full px-4 py-2 text-center text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600 transition-colors duration-200 transform">
-          Log Out
-        </button>
-      </form>
-    </div>
-  </div>
-  <!-- Main Content Area -->
-  <div class="w-3/4 flex items-center justify-center">
-    <img src="{% static 'images/michigan-stadium.png' %}" alt="Main Scene" class="w-full h-full"> <!-- Adjust path as needed -->
-  </div>
-</div>
-{% else %}
-<div class="flex items-stretch min-h-screen bg-gray-100">
-  <!-- Sidebar -->
-  <div class="flex flex-col w-1/4 bg-white shadow-md">
-    <div class="flex-grow p-6">
-      <div class="flex flex-col items-center space-y-6 pb-10">
-        <img src="{% static 'images/logo-zingers.png' %}" alt="Logo" class="w-60 h-24">  <!-- Logo displayed -->
+  {% else %}
+    <div class="flex items-stretch min-h-screen bg-gray-100">
+      <!-- Sidebar -->
+      <div class="flex flex-col w-1/4 bg-white shadow-md">
+        <div class="flex-grow p-6">
+          <div class="flex flex-col items-center space-y-6 pb-10">
+            <img src="{% static 'images/logo-zingers.png' %}"
+                 alt="Logo"
+                 class="w-60 h-24">
+            <!-- Logo displayed -->
+          </div>
+          <div>
+            <h2 class="inline text-4xl text-gray-700"
+                style="font-family: 'Helvetica Neue', sans-serif">
+              <strong>You must be logged in to play.</strong>
+            </h2>
+          </div>
+        </div>
+        <!-- Bottom Button Group -->
+        <div class="p-6">
+          <a href="{% url 'login' %}"
+             class="block w-full px-4 py-2 mb-4 text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition-colors duration-200 transform">
+            Log In
+          </a>
+          <a href="{% url 'signup' %}"
+             class="block w-full px-4 py-2 text-center text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600 transition-colors duration-200 transform">
+            Sign Up
+          </a>
+        </div>
       </div>
-      <div>
-        <h2 class="inline text-4xl text-gray-700" style="font-family: 'Helvetica Neue', sans-serif;">
-          <strong>You must be logged in to play.</strong>
-        </h2>
+      <!-- Main Content Area -->
+      <div class="w-3/4 flex items-center justify-center">
+        <img src="{% static 'images/michigan-stadium.png' %}"
+             alt="Main Scene"
+             class="w-full h-full">
+        <!-- Adjust path as needed -->
       </div>
     </div>
-    <!-- Bottom Button Group -->
-    <div class="p-6">
-      <a href="{% url 'login' %}" class="block w-full px-4 py-2 mb-4 text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition-colors duration-200 transform">
-        Log In
-      </a>
-      <a href="{% url 'signup' %}" class="block w-full px-4 py-2 text-center text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600 transition-colors duration-200 transform">
-        Sign Up
-      </a>
-    </div>
-  </div>
-  <!-- Main Content Area -->
-  <div class="w-3/4 flex items-center justify-center">
-    <img src="{% static 'images/michigan-stadium.png' %}" alt="Main Scene" class="w-full h-full"> <!-- Adjust path as needed -->
-  </div>
-</div>
-{% endif %}
+  {% endif %}
 {% endblock %}
