@@ -77,7 +77,6 @@ class Trader(models.Model):
     def sell(
         self, asset: int, price: int, quantity: int, oringinator: bool
     ) -> None:
-        print(oringinator)
         match asset:
             case 0:
                 self.asset_0 -= quantity

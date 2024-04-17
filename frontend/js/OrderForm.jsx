@@ -36,7 +36,8 @@ export default function OrderForm({
     return parseInt(askQuantity) <= amountRemaining;
   };
 
-  const submitOrder = () => {
+  const submitOrder = (event) => {
+    event.preventDefault();
     if (!isValid(price) || !isValid(quantity)) {
       alert("Invalid order syntax. Price and quantity must be integers.");
       return;
@@ -62,57 +63,55 @@ export default function OrderForm({
   };
 
   return (
-    <Stack spacing={2.2} width={100} height={250}>
-      <FormControl>
-        <ToggleButtonGroup
-          value={side}
-          exclusive
-          onChange={(event, newSide) => setSide(newSide)}
-          aria-label="text alignment"
-          id={`side-selector-${asset}`}
-        >
-          <ToggleButton value="B" aria-label="bid" id={`bid-button-${asset}`}>
-            Bid
-          </ToggleButton>
-          <ToggleButton value="A" aria-label="ask" id={`ask-button-${asset}`}>
-            Ask
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </FormControl>
-      <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-        <InputLabel htmlFor={`price-field-${asset}`}>Price</InputLabel>
-        <Input
-          id={`price-field-${asset}`}
-          startAdornment={
-            <InputAdornment position="start" type="">
-              $
-            </InputAdornment>
-          }
-          type="number"
-          value={price}
-          onChange={(event) => {
-            setPrice(event.target.value);
-          }}
-        />
-      </FormControl>
-      <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-        <InputLabel htmlFor={`quantity-field-${asset}`}>Quantity</InputLabel>
-        <Input
-          id={`quantity-field-${asset}`}
-          type="number"
-          value={quantity}
-          onChange={(event) => {
-            setQuantity(event.target.value);
-          }}
-        />
-      </FormControl>
-      <Button
-        variant="outlined"
-        onClick={submitOrder}
-        id={`submit-button-${asset}`}
-      >
-        Order
-      </Button>
-    </Stack>
+    <form onSubmit={submitOrder}>
+      <Stack spacing={2.2} width={100} height={250}>
+        <FormControl>
+          <ToggleButtonGroup
+            value={side}
+            exclusive
+            onChange={(event, newSide) => setSide(newSide)}
+            aria-label="text alignment"
+            id={`side-selector-${asset}`}
+          >
+            <ToggleButton value="B" aria-label="bid" id={`bid-button-${asset}`}>
+              Bid
+            </ToggleButton>
+            <ToggleButton value="A" aria-label="ask" id={`ask-button-${asset}`}>
+              Ask
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+          <InputLabel htmlFor={`price-field-${asset}`}>Price</InputLabel>
+          <Input
+            id={`price-field-${asset}`}
+            startAdornment={
+              <InputAdornment position="start" type="">
+                $
+              </InputAdornment>
+            }
+            type="number"
+            value={price}
+            onChange={(event) => {
+              setPrice(event.target.value);
+            }}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+          <InputLabel htmlFor={`quantity-field-${asset}`}>Quantity</InputLabel>
+          <Input
+            id={`quantity-field-${asset}`}
+            type="number"
+            value={quantity}
+            onChange={(event) => {
+              setQuantity(event.target.value);
+            }}
+          />
+        </FormControl>
+        <Button variant="outlined" id={`submit-button-${asset}`} type="submit">
+          Order
+        </Button>
+      </Stack>
+    </form>
   );
 }

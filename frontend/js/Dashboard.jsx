@@ -97,128 +97,134 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <Grid container columns={3} paddingX={4}>
-      <Grid xs={3}>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <img
-            src="/static/images/logo-zingers-white.png"
-            alt="Zingers logo"
-            height={100}
-          />
-        </div>
-      </Grid>
-      <Grid xs={2}>
-        <Grid
-          container
-          columns={2}
-          paddingLeft={1}
-          justifyContent={"space-between"}
-          alignItems={"stretch"}
-        >
-          <Grid xs={1} paddingX={2}>
-            <AssetInterface
-              asset={0}
-              orders={orders0}
-              setOrders={setOrders0}
-              webSocketConnection={webSocket0}
-              updateIdState={updates0}
-              traderId={traderId}
-              amountHeld={amountHeld0}
-              setAmountHeld={setAmountHeld0}
-              amountRemaining={amountRemaining0}
-              setAmountRemaining={setAmountRemaining0}
-              cash={cash}
-              setCash={setCash}
-              buyingPower={buyingPower}
-              setBuyingPower={setBuyingPower}
-              forceUpdate={getState}
-            />
-          </Grid>
-          <Grid xs={1} paddingX={2}>
-            <AssetInterface
-              asset={1}
-              orders={orders1}
-              setOrders={setOrders1}
-              webSocketConnection={webSocket1}
-              updateIdState={updates1}
-              traderId={traderId}
-              amountHeld={amountHeld1}
-              setAmountHeld={setAmountHeld1}
-              amountRemaining={amountRemaining1}
-              setAmountRemaining={setAmountRemaining1}
-              cash={cash}
-              setCash={setCash}
-              buyingPower={buyingPower}
-              setBuyingPower={setBuyingPower}
-              forceUpdate={getState}
-            />
-          </Grid>
-          <Grid xs={1} paddingX={2}>
-            <AssetInterface
-              asset={2}
-              orders={orders2}
-              setOrders={setOrders2}
-              webSocketConnection={webSocket2}
-              updateIdState={updates2}
-              traderId={traderId}
-              amountHeld={amountHeld2}
-              setAmountHeld={setAmountHeld2}
-              amountRemaining={amountRemaining2}
-              setAmountRemaining={setAmountRemaining2}
-              cash={cash}
-              setCash={setCash}
-              buyingPower={buyingPower}
-              setBuyingPower={setBuyingPower}
-              forceUpdate={getState}
-            />
-          </Grid>
-          <Grid xs={1} paddingX={2}>
-            <AssetInterface
-              asset={3}
-              orders={orders3}
-              setOrders={setOrders3}
-              webSocketConnection={webSocket3}
-              updateIdState={updates3}
-              traderId={traderId}
-              amountHeld={amountHeld3}
-              setAmountHeld={setAmountHeld3}
-              amountRemaining={amountRemaining3}
-              setAmountRemaining={setAmountRemaining3}
-              cash={cash}
-              setCash={setCash}
-              buyingPower={buyingPower}
-              setBuyingPower={setBuyingPower}
-              forceUpdate={getState}
-            />
-          </Grid>
-          <Grid xs={2} paddingX={2}>
-            <Portfolio
-              cash={cash}
-              buyingPower={buyingPower}
-              assets={[amountHeld0, amountHeld1, amountHeld2, amountHeld3]}
-              assetsRemaining={[
-                amountRemaining0,
-                amountRemaining1,
-                amountRemaining2,
-                amountRemaining3,
-              ]}
-            />
+    <>
+      <div style={{ height: 100, display: "flex", justifyContent: "center" }}>
+        <img
+          src="/static/images/logo-zingers-white.png"
+          alt="Zingers logo"
+          height={100}
+        />
+      </div>
+      <Grid
+        container
+        columns={3}
+        paddingX={4}
+        rowSpacing={0}
+        alignItems="flex-start"
+      >
+        <Grid xs={2}>
+          <Grid
+            container
+            columns={2}
+            paddingLeft={1}
+            justifyContent={"space-between"}
+            alignItems={"stretch"}
+          >
+            <Grid xs={1} paddingX={2}>
+              <AssetInterface
+                asset={0}
+                orders={orders0}
+                setOrders={setOrders0}
+                webSocketConnection={webSocket0}
+                updateIdState={updates0}
+                traderId={traderId}
+                amountHeld={amountHeld0}
+                setAmountHeld={setAmountHeld0}
+                amountRemaining={amountRemaining0}
+                setAmountRemaining={setAmountRemaining0}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
+                forceUpdate={getState}
+              />
+            </Grid>
+            <Grid xs={1} paddingX={2}>
+              <AssetInterface
+                asset={1}
+                orders={orders1}
+                setOrders={setOrders1}
+                webSocketConnection={webSocket1}
+                updateIdState={updates1}
+                traderId={traderId}
+                amountHeld={amountHeld1}
+                setAmountHeld={setAmountHeld1}
+                amountRemaining={amountRemaining1}
+                setAmountRemaining={setAmountRemaining1}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
+                forceUpdate={getState}
+              />
+            </Grid>
+            <Grid xs={1} paddingX={2}>
+              <AssetInterface
+                asset={2}
+                orders={orders2}
+                setOrders={setOrders2}
+                webSocketConnection={webSocket2}
+                updateIdState={updates2}
+                traderId={traderId}
+                amountHeld={amountHeld2}
+                setAmountHeld={setAmountHeld2}
+                amountRemaining={amountRemaining2}
+                setAmountRemaining={setAmountRemaining2}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
+                forceUpdate={getState}
+              />
+            </Grid>
+            <Grid xs={1} paddingX={2}>
+              <AssetInterface
+                asset={3}
+                orders={orders3}
+                setOrders={setOrders3}
+                webSocketConnection={webSocket3}
+                updateIdState={updates3}
+                traderId={traderId}
+                amountHeld={amountHeld3}
+                setAmountHeld={setAmountHeld3}
+                amountRemaining={amountRemaining3}
+                setAmountRemaining={setAmountRemaining3}
+                cash={cash}
+                setCash={setCash}
+                buyingPower={buyingPower}
+                setBuyingPower={setBuyingPower}
+                forceUpdate={getState}
+              />
+            </Grid>
+            <Grid xs={2} paddingX={2}>
+              <Portfolio
+                cash={cash}
+                buyingPower={buyingPower}
+                assets={[amountHeld0, amountHeld1, amountHeld2, amountHeld3]}
+                assetsRemaining={[
+                  amountRemaining0,
+                  amountRemaining1,
+                  amountRemaining2,
+                  amountRemaining3,
+                ]}
+              />
+            </Grid>
           </Grid>
         </Grid>
+        <Grid xs={1} paddingLeft={2}>
+          <Positions
+            orders={{
+              ...orders0,
+              ...orders1,
+              ...orders2,
+              ...orders3,
+            }}
+            traderId={traderId}
+            sendCancelMessage={sendCancelMessage}
+          />
+          <Leaderboard username={username} />
+        </Grid>
       </Grid>
-      <Grid xs={1} paddingLeft={2}>
-        <Positions
-          orders={{
-            ...orders0,
-            ...orders1,
-            ...orders2,
-            ...orders3,
-          }}
-          traderId={traderId}
-          sendCancelMessage={sendCancelMessage}
-        />
-        <Leaderboard username={username} />
-      </Grid>
-    </Grid>
+    </>
   );
 }

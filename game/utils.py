@@ -120,7 +120,6 @@ def match_order(
 
 def settle_trades(trades: list[dict]) -> None:
     for trade in trades:
-        print(trade)
         buyer: Trader = Trader.objects.get(id=trade["buyerId"])
         seller: Trader = Trader.objects.get(id=trade["sellerId"])
         buyer.buy(
@@ -144,8 +143,6 @@ def cancel_order(orderId: int, userId: int) -> None:
     except (Order.DoesNotExist, Trader.DoesNotExist):
         return
     if trader.user.id != userId:
-        print(trader.user.id)
-        print(f"userId: {userId}")
         return
 
     if order.side == "B":
