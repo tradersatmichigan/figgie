@@ -72,6 +72,7 @@ export default function OrderForm({
             onChange={(event, newSide) => setSide(newSide)}
             aria-label="text alignment"
             id={`side-selector-${asset}`}
+            required
           >
             <ToggleButton value="B" aria-label="bid" id={`bid-button-${asset}`}>
               Bid
@@ -95,6 +96,7 @@ export default function OrderForm({
             onChange={(event) => {
               setPrice(event.target.value);
             }}
+            required
           />
         </FormControl>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -106,6 +108,7 @@ export default function OrderForm({
             onChange={(event) => {
               setQuantity(event.target.value);
             }}
+            required
           />
         </FormControl>
         <Button variant="outlined" id={`submit-button-${asset}`} type="submit">

@@ -153,7 +153,7 @@ export default function AssetInterface({
   return (
     <Box>
       <h3>
-        {assetNames[asset]} (${(asset + 1) * 10} × {amountHeld}){" "}
+        (${(asset + 1) * 10}) {assetNames[asset]} &#8212; {amountHeld} held
         {connectionStatusIcon}
       </h3>
       <Grid container columns={3} spacing={2}>
