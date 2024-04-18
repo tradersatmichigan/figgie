@@ -58,7 +58,7 @@ def get_all_orders(asset: int) -> dict[int, dict[str, int | str]]:
             "price": order.price,
             "quantity": order.quantity,
         }
-        for order in Order.objects.filter(asset=asset)
+        for order in Order.objects.filter(asset=asset).select_related("trader")
     }
 
 
