@@ -28,7 +28,15 @@ export default function AssetInterface({
   const [lastUpdateId, setLastUpdateId] = updateIdState;
 
   function updateOrders(order, trade) {
-    if (order.quantity === trade.quantity) {
+    if (
+      order === undefined ||
+      trade === undefined ||
+      order === null ||
+      trade === null
+    ) {
+      return;
+    }
+    if (order?.quantity === trade?.quantity) {
       setOrders((prevOrders) => {
         const newOrders = { ...prevOrders };
         delete newOrders[trade.orderId];
@@ -48,16 +56,16 @@ export default function AssetInterface({
   function settleTrades(trades) {
     for (const trade of trades) {
       const order = orders[trade.orderId];
-      if (trade.buyerId === traderId) {
+      if (trade?.buyerId === traderId) {
         setAmountHeld((prev) => prev + trade.quantity);
         setCash((prev) => prev - trade.price * trade.quantity);
         setAmountRemaining((prev) => prev + trade.quantity);
-        if (order.traderId !== traderId) {
+        if (order?.traderId !== traderId) {
           // If current user fulfills existing order
           // I.e., not the originator
           setBuyingPower((prev) => prev - trade.price * trade.quantity);
         }
-      } else if (trade.sellerId === traderId) {
+      } else if (trade?.sellerId === traderId) {
         setAmountHeld((prev) => prev - trade.quantity);
         setCash((prev) => prev + trade.price * trade.quantity);
         setBuyingPower((prev) => prev + trade.price * trade.quantity);
@@ -102,7 +110,8 @@ export default function AssetInterface({
       return;
     } else {
       forceUpdate();
-      setLastUpdateId(message.updateId);
+      setLastUpdateId(null);
+      return;
     }
 
     if (message.cancel) {
@@ -112,7 +121,7 @@ export default function AssetInterface({
 
     const order = message.order;
     if (order !== null && order !== undefined) {
-      if (order.traderId === traderId) {
+      if (order?.traderId === traderId) {
         if (order.side === "B") {
           setBuyingPower((prev) => prev - order.price * order.quantity);
         } else {
