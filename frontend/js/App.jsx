@@ -11,7 +11,7 @@ const darkTheme = createTheme({
 });
 
 export const assetNames = ["Dressing", "Rye", "Swiss", "Pastrami"];
-export const assetAbbreviations = ["D", "R", "S", "P"];
+export const assetAbbreviations = ["DSG", "RYE", "SWS", "PAS"];
 
 export default function App() {
   return (
