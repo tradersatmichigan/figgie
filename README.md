@@ -55,7 +55,7 @@ If this is your first time running the backend, you first need to run
 ```shell
 python manage.py makemigrations
 python manage.py makemigrations game
-python mangae.py migrate
+python manage.py migrate
 ```
 
 Then run the backend with:
