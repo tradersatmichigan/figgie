@@ -6,9 +6,11 @@
         rel="stylesheet">
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="w-full max-w-md p-6 m-auto bg-white rounded-md shadow-md">
-      <img src="{% static 'images/logo-zingers.png' %}"
-           alt="Logo"
-           class="w-auto h-24 mx-auto">
+      <a href="{% url 'index' %}">
+        <img src="{% static 'images/logo-zingers.png' %}"
+             alt="Logo"
+             class="w-auto h-24 mx-auto">
+      </a>
       <form method="post" class="mt-6">
         {% csrf_token %}
         {% for field in form %}
@@ -33,6 +35,11 @@
             Log In
           </button>
         </div>
+        <h3 class="mt-6" style="text-align: center">Don't have an account?</h3>
+        <a href="{% url 'signup' %}"
+           class="mt-6 block w-full px-4 py-2 text-center text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600 transition-colors duration-200 transform">
+          Sign Up
+        </a>
       </form>
     </div>
   </div>

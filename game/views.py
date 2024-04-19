@@ -12,6 +12,8 @@ from django.views.generic import CreateView
 from .models import Trader
 from .utils import get_all_orders
 
+prev = 0
+
 
 class CustomBaseUserCreationForm(BaseUserCreationForm):
     first_name = forms.CharField(max_length=30, required=True)
@@ -42,7 +44,9 @@ class CustomBaseUserCreationForm(BaseUserCreationForm):
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()
-            starting_asset = random.randint(0, 3)
+            global prev
+            starting_asset = prev
+            prev = (prev + 1) % 4
             starting_amount = 2000 // (starting_asset + 1)
             starting_capital = 30_000 - (
                 starting_amount * 10 * (starting_asset + 1)
