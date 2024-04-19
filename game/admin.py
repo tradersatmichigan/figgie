@@ -28,6 +28,7 @@ def reset_portfolio(modeladmin, request, queryset):
         s.asset_2_remaining = starting_amount if starting_asset == 2 else 0
         s.asset_3_remaining = starting_amount if starting_asset == 3 else 0
         s.save()
+    Order.objects.all().delete()
 
 
 @admin.action(description="Export leaderboard")
