@@ -34,6 +34,8 @@ ALLOWED_HOSTS = [
     os.popen("ipconfig getifaddr en0").read().strip(),
 ]
 
+CSRF_TRUSTED_ORIGINS = ["http://35.2.30.157:8080"]
+
 
 # Application definition
 
