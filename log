@@ -1,7 +1,0 @@
-Performing system checks...
-
-System check identified no issues (0 silenced).
-April 17, 2024 - 23:58:47
-Django version 5.0.4, using settings 'backend.settings'
-Starting ASGI/Daphne version 4.1.0 development server at http://127.0.0.1:8000/
-Quit the server with CONTROL-C.
